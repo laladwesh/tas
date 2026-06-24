@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la .*)",
+      "Read(//c/Users/Asus/OneDrive - Indian Institute of Technology Guwahati/Desktop/**)",
+      "Bash(npm -v)",
+      "Bash(npm run *)",
+      "PowerShell(Get-NetTCPConnection -LocalPort 3000 -State Listen -ErrorAction SilentlyContinue | Select-Object -ExpandProperty OwningProcess -Unique | ForEach-Object { try { Stop-Process -Id $_ -Force -ErrorAction Stop; \"Stopped PID $_\" } catch {} })",
+      "Bash(grep -iE \"hero|\\\\.\\(img|jpg|jpeg|png|webp|avif|svg\\)$\")",
+      "Bash(xxd hero1.img)",
+      "Bash(npm install *)",
+      "Bash(node -e \"console.log\\('nodemailer', require\\('nodemailer/package.json'\\).version\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(node scripts/verifyMail.cjs)"
+    ]
+  }
+}

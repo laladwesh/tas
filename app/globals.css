@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+/* -------------------------------------------------------------------------
+   Brand design tokens — tweak the brand red here and it updates everywhere
+   (header bar, the "Get Your Free Quote" button, etc.).
+   These generate Tailwind utilities like `bg-brand`, `text-brand`, `bg-badge`.
+--------------------------------------------------------------------------- */
+@theme {
+  --color-brand: #bc3e37;
+  --color-brand-dark: #a5352f;
+  --color-badge: #f6e7a6;
+  --color-badge-text: #6b5e1e;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #111827;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-roboto), ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
