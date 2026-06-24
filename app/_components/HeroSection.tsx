@@ -15,45 +15,47 @@ const AUTOPLAY_MS = 6000;
 export default function HeroSection() {
   return (
     <section className="relative w-full overflow-hidden bg-white">
-      <div className="grid grid-cols-1 lg:grid-cols-2">
-        {/* ---------------- Left: copy ---------------- */}
-        <div className="flex items-center justify-center lg:justify-end pr-0 lg:pr-12">
-          <div className="w-full max-w-[540px] px-5 py-12 sm:px-8 lg:py-24 lg:pr-12">
-            {/* Badge */}
-            <span className="inline-block rounded-full bg-badge px-4 py-1.5 text-sm font-medium text-badge-text">
-              Join over 1,000 happy customers
-            </span>
+      {/* Copy — shares the same centered container (and left edge) as the
+          other sections, e.g. "Our Services". */}
+      <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
+        <div className="py-12 lg:w-1/2 lg:py-24 lg:pr-10">
+          {/* Badge */}
+          <span className="inline-block rounded-full bg-badge px-4 py-1.5 text-sm font-medium text-badge-text">
+            Join over 1,000 happy customers
+          </span>
 
-            {/* Heading */}
-            <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight text-gray-900 sm:text-5xl">
-              Fencing Made for
-              <br />
-              Perth Sun, Sand &amp; Salt
-            </h1>
+          {/* Heading */}
+          <h1 className="mt-6 text-4xl font-extrabold leading-[1.08] tracking-tight text-gray-900 sm:text-5xl">
+            Fencing Made for
+            <br />
+            Perth Sun, Sand &amp; Salt
+          </h1>
 
-            {/* Sub copy */}
-            <p className="mt-5 max-w-md text-base leading-relaxed text-black sm:text-lg sm:leading-relaxed lg:max-w-lg">
-              We&apos;ve been fencing Perth suburbs for years: Colorbond,
-              aluminium slat, pool fencing, gates and retaining walls. We know
-              what holds up in local conditions and what doesn&apos;t.
-            </p>
+          {/* Sub copy */}
+          <p className="mt-5 max-w-md text-base leading-relaxed text-black sm:text-lg sm:leading-relaxed lg:max-w-lg">
+            We&apos;ve been fencing Perth suburbs for years: Colorbond,
+            aluminium slat, pool fencing, gates and retaining walls. We know
+            what holds up in local conditions and what doesn&apos;t.
+          </p>
 
-            {/* Google rating */}
-            <GoogleRatingCard />
+          {/* Google rating */}
+          <GoogleRatingCard />
 
-            {/* CTA */}
-            <div className="mt-7">
-              <a
-                href="#quote"
-                className="inline-flex items-center justify-center  bg-brand px-7 py-3.5 text-base font-medium text-white shadow-sm transition-colors hover:bg-brand-dark"
-              >
-                Get Your Free Quote Today
-              </a>
-            </div>
+          {/* CTA */}
+          <div className="mt-7">
+            <a
+              href="#quote"
+              className="inline-flex items-center justify-center bg-brand px-7 py-3.5 text-base font-medium text-white shadow-sm transition-colors hover:bg-brand-dark"
+            >
+              Get Your Free Quote Today
+            </a>
           </div>
         </div>
+      </div>
 
-        {/* ---------------- Right: image carousel ---------------- */}
+      {/* Image carousel — stacks under the copy on mobile; on desktop it fills
+          the right half and bleeds to the right edge of the screen. */}
+      <div className="relative h-[340px] w-full sm:h-[440px] lg:absolute lg:inset-y-0 lg:right-0 lg:h-full lg:w-1/2">
         <HeroCarousel />
       </div>
     </section>
@@ -98,8 +100,8 @@ function HeroCarousel() {
   }, [count]);
 
   return (
-    <div className="relative min-h-[320px] w-full  sm:min-h-[420px]  lg:min-h-[560px] ">
-      <div className="relative h-full min-h-[inherit] w-full overflow-hidden rounded-bl-[44px] lg:rounded-bl-[60px]">
+    <div className="relative h-full w-full pt-4 lg:pt-6">
+      <div className="relative h-full w-full overflow-hidden rounded-bl-[44px] lg:rounded-bl-[60px]">
         {heroImages.map((img, i) => (
           <Image
             key={i}

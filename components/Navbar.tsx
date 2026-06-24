@@ -6,7 +6,7 @@ const PHONE_HREF = "tel:0431703770";
 export default function Navbar() {
   return (
     <header className="w-full bg-brand text-white">
-      <div className="mx-auto flex h-18 max-w-7xl items-center justify-between px-5 sm:px-8 lg:px-12">
+      <div className="flex h-18 w-full items-center justify-between px-5 sm:px-8 lg:px-12">
         {/* Logo */}
         <a href="/" className="flex items-center gap-2.5 sm:gap-3">
           <StagLogo className="h-9 w-auto shrink-0 sm:h-11" />
