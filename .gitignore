@@ -16,7 +16,7 @@
 
 # debug
 npm-debug.log*
-.claude
+/.claude
 yarn-debug.log*
 yarn-error.log*
 
