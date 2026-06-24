@@ -1,0 +1,34 @@
+name: Deploy to EC2
+
+# Runs on every push to master, and can be triggered manually from the
+# Actions tab (workflow_dispatch).
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+# Never let two deploys run at once.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script_stop: true # stop on first failing command
+          command_timeout: 20m
+          script: |
+            cd ~/tas
+            git fetch --all
+            git reset --hard origin/master
+            npm ci
+            npm run build
+            pm2 restart stagfencing --update-env
+            pm2 save

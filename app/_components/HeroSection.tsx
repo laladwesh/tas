@@ -98,7 +98,7 @@ function HeroCarousel() {
   }, [count]);
 
   return (
-    <div className="relative min-h-[320px] w-full pt-4 sm:min-h-[420px] sm:pt-5 lg:min-h-[560px] lg:pt-6">
+    <div className="relative min-h-[320px] w-full  sm:min-h-[420px]  lg:min-h-[560px] ">
       <div className="relative h-full min-h-[inherit] w-full overflow-hidden rounded-bl-[44px] lg:rounded-bl-[60px]">
         {heroImages.map((img, i) => (
           <Image
