@@ -4,7 +4,6 @@ import { useActionState } from "react";
 import { sendQuote, type QuoteState } from "@/app/actions/sendQuote";
 import { services } from "@/data/services";
 
-// Dropdown options stay in sync with the "Our Services" grid.
 const fenceTypes = services.map((service) => service.title);
 
 const inputClass =

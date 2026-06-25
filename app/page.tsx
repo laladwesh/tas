@@ -5,6 +5,8 @@ import WhyUsSection from "@/app/_components/WhyUsSection";
 import QuoteSection from "@/app/_components/QuoteSection";
 import FaqSection from "@/app/_components/FaqSection";
 import Footer from "@/app/_components/Footer";
+import JsonLd from "@/components/JsonLd";
+import { faqJsonLd } from "@/lib/seo";
 
 export default function Home() {
   return (
@@ -30,6 +32,8 @@ export default function Home() {
       {/* Footer */}
       <Footer />
 
+      {/* FAQ structured data (rich results) */}
+      <JsonLd data={faqJsonLd()} />
     </main>
   );
 }

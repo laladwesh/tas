@@ -1,44 +1,7 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-
-type Faq = {
-  question: string;
-  answer: ReactNode | null;
-  defaultOpen?: boolean;
-};
-
-const faqs: Faq[] = [
-  {
-    question: "What types of fencing do you offer in Perth?",
-    answer: (
-      <>
-        We install Colorbond, timber, aluminium slat,{" "}
-        <span className="underline">pool fencing</span>, gates, and retaining
-        walls across Perth.
-      </>
-    ),
-    defaultOpen: true,
-  },
-  {
-    question: "What are the benefits of Colorbond fencing in Perth?",
-    answer:
-      "Colorbond fencing is durable, low maintenance, weather-resistant, and ideal for Perth conditions.",
-    defaultOpen: false,
-  },
-  {
-    question: "Is aluminium slat fencing suitable for Perth's climate?",
-    answer:
-      "Yes — when installed correctly and with the right materials, aluminium slat fencing performs well in Perth.",
-    defaultOpen: false,
-  },
-  {
-    question: "Does Stag Fencing install compliant fencing services in Perth?",
-    answer:
-      "Yes, At Stag Fencing all fencing services installations meet Western Australian safety regulations.",
-    defaultOpen: false,
-  }
-];
+import { useState } from "react";
+import { faqs } from "@/data/faqs";
 
 export default function FaqSection() {
   const [open, setOpen] = useState<boolean[]>(() =>
