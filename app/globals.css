@@ -59,6 +59,16 @@ body {
   text-shadow: 0px 0px 4px rgba(0, 0, 0, 0.5);
 }
 
+/* Route-change progress bar (see app/(site)/loading.tsx). */
+@keyframes loadbar {
+  0% {
+    transform: translateX(-120%);
+  }
+  100% {
+    transform: translateX(420%);
+  }
+}
+
 /* -------------------------------------------------------------------------
    Interaction polish
 --------------------------------------------------------------------------- */
