@@ -3,12 +3,11 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import SearchOverlay from "./SearchOverlay";
+import SearchBox from "./SearchOverlay";
 import {
   ArrowUpRightIcon,
   MailIcon,
   PhoneCallIcon,
-  SearchIcon,
   ShoppingCartIcon,
   StagLogo,
   StagWordmark,
@@ -39,7 +38,6 @@ export default function SiteHeader({
   cartCount = 0,
 }: Props) {
   const pathname = usePathname();
-  const [searchOpen, setSearchOpen] = useState(false);
 
   // Cart badge is per-user, so it's loaded client-side (keeps pages static).
   // Re-fetch on navigation so it updates after add-to-cart redirects here.
@@ -116,13 +114,7 @@ export default function SiteHeader({
         {/* Actions */}
         <div className="flex shrink-0 items-center justify-end gap-[16px]">
           <div className="hidden items-center gap-[8px] text-ink sm:flex">
-            <button
-              type="button"
-              aria-label="Search"
-              onClick={() => setSearchOpen(true)}
-            >
-              <SearchIcon className="size-[20px]" />
-            </button>
+            <SearchBox />
             <Link href="/cart" aria-label="Cart" className="relative">
               <ShoppingCartIcon className="size-[20px]" />
               {count > 0 && (
@@ -149,8 +141,6 @@ export default function SiteHeader({
           </Link>
         </div>
       </nav>
-
-      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
   );
 }
