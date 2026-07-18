@@ -60,7 +60,7 @@ export default async function CalculatorPage({
             </div>
 
             <span className="rounded-[20px] border border-black/15 px-3 py-1 text-[11px] font-medium text-black/60">
-              Instant estimate · incl. GST
+              Instant estimate · incl. Tax
             </span>
           </div>
 

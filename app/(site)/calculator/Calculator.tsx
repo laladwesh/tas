@@ -29,6 +29,14 @@ const selectClass =
   "h-[42px] w-full rounded-[4px] bg-field px-3 text-[13px] text-black outline-none focus:ring-1 focus:ring-brand";
 const labelClass = "mb-1 block text-[11px] font-medium text-black/60";
 
+/** Sleeper plinth run under the fence — each level adds a per-lm cost. */
+const PLINTH_OPTIONS = [
+  { label: "None", perLmCents: 0 },
+  { label: "1 sleeper (200mm)", perLmCents: 4500 },
+  { label: "2 sleepers (400mm)", perLmCents: 8500 },
+  { label: "3 sleepers (600mm)", perLmCents: 12000 },
+];
+
 export default function Calculator({
   initialFenceId,
 }: {
@@ -48,7 +56,7 @@ export default function Calculator({
   const [height, setHeight] = useState(
     startFence.heights.includes("1800 mm") ? "1800 mm" : startFence.heights[0],
   );
-  const [finish, setFinish] = useState(startFence.finishes[0]);
+  const [plinth, setPlinth] = useState(PLINTH_OPTIONS[0].label);
   const [length, setLength] = useState(20);
 
   const [sloping, setSloping] = useState(false);
@@ -62,7 +70,6 @@ export default function Calculator({
     const next = fenceTypes.find((f) => f.id === id)!;
     setFenceId(id);
     setStyle(next.styles[0]);
-    setFinish(next.finishes[0]);
     if (!next.heights.includes(height)) setHeight(next.heights[0]);
   };
 
@@ -79,11 +86,15 @@ export default function Calculator({
     let low = rate * uplift * length;
     if (removeExisting) low += REMOVE_EXISTING_PER_LM_CENTS * length;
 
+    const plinthPerLm =
+      PLINTH_OPTIONS.find((p) => p.label === plinth)?.perLmCents ?? 0;
+    low += plinthPerLm * length;
+
     return {
       lowCents: Math.round(low),
       highCents: Math.round(low * RANGE_UPPER),
     };
-  }, [fence, height, supplyOnly, sloping, tightAccess, length, removeExisting]);
+  }, [fence, height, supplyOnly, sloping, tightAccess, length, removeExisting, plinth]);
 
   const total = useMemo(
     () =>
@@ -288,17 +299,17 @@ export default function Calculator({
                 </div>
 
                 <div className="sm:col-span-2">
-                  <label className={labelClass} htmlFor="finish">
-                    Finish / colour (optional)
+                  <label className={labelClass} htmlFor="plinth">
+                    Plinth / retaining underneath
                   </label>
                   <select
-                    id="finish"
-                    value={finish}
-                    onChange={(e) => setFinish(e.target.value)}
+                    id="plinth"
+                    value={plinth}
+                    onChange={(e) => setPlinth(e.target.value)}
                     className={selectClass}
                   >
-                    {fence.finishes.map((option) => (
-                      <option key={option}>{option}</option>
+                    {PLINTH_OPTIONS.map((option) => (
+                      <option key={option.label}>{option.label}</option>
                     ))}
                   </select>
                 </div>
@@ -480,7 +491,7 @@ export default function Calculator({
                 Estimated investment
               </p>
               <span className="rounded-[10px] bg-white px-2 py-0.5 text-[9px] font-semibold text-black/60">
-                incl. GST
+                incl. Tax
               </span>
             </div>
             <p className="text-[20px] font-semibold text-ink">
