@@ -11,6 +11,9 @@ export const authConfig = {
   session: { strategy: "jwt" },
   pages: {
     signIn: "/admin/login",
+    // Auth failures (e.g. an OAuth error) land here with ?error=… instead of
+    // the raw Auth.js error page.
+    error: "/login",
   },
   providers: [], // real providers are added in auth.ts
   callbacks: {

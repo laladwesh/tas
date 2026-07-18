@@ -6,8 +6,30 @@ import { GoogleG } from "@/components/icons";
 
 export const metadata = { title: "Sign in" };
 
-export default function LoginPage() {
+/** Auth.js error codes → friendly copy. */
+function errorMessage(code?: string) {
+  if (!code) return null;
+  switch (code) {
+    case "OAuthAccountNotLinked":
+      return "That email is already registered with a different sign-in method.";
+    case "AccessDenied":
+      return "Access denied. Please try a different account.";
+    case "Configuration":
+    case "OAuthCallbackError":
+      return "Sign-in isn’t available right now. Please try again shortly.";
+    default:
+      return "Sign-in failed. Please try again.";
+  }
+}
+
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ error?: string }>;
+}) {
+  const { error } = await searchParams;
   const anyOauth = googleEnabled || appleEnabled;
+  const message = errorMessage(error);
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-[#0d0d0d] px-5 py-12">
@@ -22,6 +44,12 @@ export default function LoginPage() {
           <p className="mt-1 text-sm text-gray-500">
             Track your quotes and orders.
           </p>
+
+          {message && (
+            <p className="mt-4 rounded-sm border border-brand/30 bg-brand/5 px-3 py-2 text-sm text-brand">
+              {message}
+            </p>
+          )}
 
           {anyOauth && (
             <>

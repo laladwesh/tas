@@ -80,8 +80,14 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en-AU" className="scroll-smooth">
-      <body className={`${manrope.variable} ${roboto.variable} antialiased`}>
+    <html lang="en-AU" className="scroll-smooth" suppressHydrationWarning>
+      {/* suppressHydrationWarning: browser extensions (e.g. ColorZilla adds
+          cz-shortcut-listen, Grammarly adds data-gr-*) inject attributes on
+          <body> before React hydrates, causing a harmless mismatch warning. */}
+      <body
+        className={`${manrope.variable} ${roboto.variable} antialiased`}
+        suppressHydrationWarning
+      >
         {children}
       </body>
     </html>
