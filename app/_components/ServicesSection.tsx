@@ -1,7 +1,9 @@
 import Image from "next/image";
-import { services } from "@/data/services";
+import type { ServiceDTO } from "@/server/services/content";
 
-export default function ServicesSection() {
+export default function ServicesSection({ services }: { services: ServiceDTO[] }) {
+  if (services.length === 0) return null;
+
   return (
     <section className="w-full bg-white py-14 lg:py-20">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
@@ -11,23 +13,25 @@ export default function ServicesSection() {
 
         <div className="mt-8 grid grid-cols-2 gap-x-6 gap-y-9 md:grid-cols-3 lg:mt-10 lg:grid-cols-4">
           {services.map((service, i) => (
-            <article key={i} className="group">
+            <article key={service.title + i} className="group">
               <div className="relative aspect-[2/1] w-full overflow-hidden rounded-lg bg-gray-100">
                 <Image
                   src={service.image}
                   alt={service.title}
                   fill
                   sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  className="object-cover "
+                  className="object-cover"
                 />
               </div>
               <h3 className="mt-3 text-base font-semibold text-gray-900">
                 {service.title}
               </h3>
-              <p className="mt-1 text-sm text-gray-500">
-                Starting from{" "}
-                <span className="font-medium text-brand">{service.price}</span>
-              </p>
+              {service.price && (
+                <p className="mt-1 text-sm text-gray-500">
+                  Starting from{" "}
+                  <span className="font-medium text-brand">{service.price}</span>
+                </p>
+              )}
             </article>
           ))}
         </div>

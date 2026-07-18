@@ -1,36 +1,12 @@
-import { services } from "@/data/services";
-import { faqs } from "@/data/faqs";
+import { SITE_URL } from "@/lib/env";
+import type { ServiceDTO, FaqDTO, SiteSettings } from "@/server/services/content";
 
-/* ===========================================================================
-   Central SEO config. Update the TODO fields with the real business details
-   for the strongest Perth local-search results.
-   =========================================================================== */
+/* Static, non-editable config. Everything else now comes from Site settings
+   in the admin (see server/services/content.ts). */
 export const siteConfig = {
   name: "Stag Fencing",
-  url: "https://stagfencing.com.au",
-  title: "Stag Fencing Perth | Colorbond, Pool & Slat Fencing Experts",
-  description:
-    "Perth's trusted fencing contractor — Colorbond, aluminium slat, pool fencing, gates, automation, retaining walls and asbestos fence removal. Built for Perth's sun, sand & salt. Get a free quote.",
-  phoneDisplay: "0431703770",
-  phoneIntl: "+61431703770",
-  email: "quote@stagfencing.com.au",
+  url: SITE_URL,
   ogImage: "/hero1.png",
-
-  // TODO: confirm the real street address, postcode and coordinates.
-  address: {
-    streetAddress: "", // e.g. "12 Example St, Suburb"
-    locality: "Perth",
-    region: "WA",
-    postalCode: "6000",
-    country: "AU",
-  },
-  // Perth CBD as a placeholder — set to the real business location.
-  geo: { latitude: -31.9523, longitude: 115.8613 },
-
-  // TODO: add Facebook / Instagram / Google Business Profile URLs — these
-  // strengthen local SEO and entity trust.
-  sameAs: [] as string[],
-
   keywords: [
     "fencing Perth",
     "Perth fencing contractor",
@@ -44,13 +20,23 @@ export const siteConfig = {
     "fence installation Perth",
     "fencing company Perth",
   ],
+  // TODO: add Facebook / Instagram / Google Business Profile URLs.
+  sameAs: [] as string[],
 };
 
 const abs = (path: string) => `${siteConfig.url}${path}`;
 const BUSINESS_ID = `${siteConfig.url}/#business`;
 
+/** Normalises "0431703770" -> "+61431703770" for schema.org. */
+function toIntlPhone(display: string) {
+  const digits = display.replace(/\D/g, "");
+  if (digits.startsWith("0")) return `+61${digits.slice(1)}`;
+  if (digits.startsWith("61")) return `+${digits}`;
+  return display;
+}
+
 /** LocalBusiness markup — the key driver of Perth local-pack visibility. */
-export function businessJsonLd() {
+export function businessJsonLd(services: ServiceDTO[], settings: SiteSettings) {
   return {
     "@context": "https://schema.org",
     "@type": "HomeAndConstructionBusiness",
@@ -59,29 +45,26 @@ export function businessJsonLd() {
     url: siteConfig.url,
     image: abs(siteConfig.ogImage),
     logo: abs("/icon.svg"),
-    telephone: siteConfig.phoneIntl,
-    email: siteConfig.email,
+    telephone: toIntlPhone(settings.phoneDisplay),
+    email: settings.email,
     priceRange: "$$",
     address: {
       "@type": "PostalAddress",
-      ...(siteConfig.address.streetAddress
-        ? { streetAddress: siteConfig.address.streetAddress }
-        : {}),
-      addressLocality: siteConfig.address.locality,
-      addressRegion: siteConfig.address.region,
-      postalCode: siteConfig.address.postalCode,
-      addressCountry: siteConfig.address.country,
+      ...(settings.addressStreet ? { streetAddress: settings.addressStreet } : {}),
+      addressLocality: settings.addressLocality,
+      addressRegion: settings.addressRegion,
+      postalCode: settings.addressPostalCode,
+      addressCountry: settings.addressCountry,
     },
     geo: {
       "@type": "GeoCoordinates",
-      latitude: siteConfig.geo.latitude,
-      longitude: siteConfig.geo.longitude,
+      latitude: settings.geoLat,
+      longitude: settings.geoLng,
     },
     areaServed: [
       { "@type": "City", name: "Perth" },
       { "@type": "AdministrativeArea", name: "Western Australia" },
     ],
-    // TODO: adjust opening hours to the real ones.
     openingHoursSpecification: [
       {
         "@type": "OpeningHoursSpecification",
@@ -113,21 +96,21 @@ export function businessJsonLd() {
   };
 }
 
-export function websiteJsonLd() {
+export function websiteJsonLd(settings: SiteSettings) {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "@id": `${siteConfig.url}/#website`,
     url: siteConfig.url,
     name: siteConfig.name,
-    description: siteConfig.description,
+    description: settings.seoDescription,
     inLanguage: "en-AU",
     publisher: { "@id": BUSINESS_ID },
   };
 }
 
 /** FAQPage markup — can earn expandable FAQ rich results in Google. */
-export function faqJsonLd() {
+export function faqJsonLd(faqs: FaqDTO[]) {
   return {
     "@context": "https://schema.org",
     "@type": "FAQPage",

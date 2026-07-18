@@ -1,20 +1,21 @@
-name: Deploy to EC2
+name: Deploy
 
-# Runs on every push to master, and can be triggered manually from the
-# Actions tab (workflow_dispatch).
+# Single environment: master -> https://stagfencing.com.au
+# Deploys into the existing checkout + PM2 process on the EC2 box.
 on:
   push:
     branches: [master]
   workflow_dispatch:
 
-# Never let two deploys run at once.
-concurrency:
-  group: deploy-production
-  cancel-in-progress: false
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
+    # Never let two deploys run at once.
+    concurrency:
+      group: deploy-production
+      cancel-in-progress: false
+
     steps:
       - name: Deploy over SSH
         uses: appleboy/ssh-action@v1.2.0
@@ -22,13 +23,21 @@ jobs:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          script_stop: true # stop on first failing command
-          command_timeout: 20m
+          script_stop: true # abort on the first failing command
+          command_timeout: 25m
           script: |
-            cd ~/tas
-            git fetch --all
+            set -e
+            cd /home/ubuntu/tas
+
+            # Take exactly what's on master. reset --hard only touches TRACKED
+            # files, so the .env in this directory is never clobbered.
+            git fetch --all --prune
             git reset --hard origin/master
+
             npm ci
             npm run build
+
             pm2 restart stagfencing --update-env
             pm2 save
+
+            echo "==> Live at https://stagfencing.com.au"

@@ -2,16 +2,13 @@
 
 import { useActionState } from "react";
 import { sendQuote, type QuoteState } from "@/app/actions/sendQuote";
-import { services } from "@/data/services";
-
-const fenceTypes = services.map((service) => service.title);
 
 const inputClass =
   "w-full rounded-sm border border-gray-300 px-3 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 outline-none transition focus:border-brand focus:ring-1 focus:ring-brand";
 
 const labelClass = "mb-1.5 block text-sm font-medium text-gray-700";
 
-export default function QuoteSection() {
+export default function QuoteSection({ fenceTypes }: { fenceTypes: string[] }) {
   const [state, formAction, pending] = useActionState<QuoteState, FormData>(
     sendQuote,
     null
@@ -128,9 +125,7 @@ export default function QuoteSection() {
               {state && (
                 <p
                   role="status"
-                  className={`text-sm ${
-                    state.ok ? "text-green-600" : "text-brand"
-                  }`}
+                  className={`text-sm ${state.ok ? "text-green-600" : "text-brand"}`}
                 >
                   {state.message}
                 </p>

@@ -1,76 +1,88 @@
 import type { Metadata } from "next";
-import { Roboto } from "next/font/google";
+import { Manrope, Roboto } from "next/font/google";
 import "./globals.css";
-import JsonLd from "@/components/JsonLd";
-import { siteConfig, businessJsonLd, websiteJsonLd } from "@/lib/seo";
+import { siteConfig } from "@/lib/seo";
+import { getSettings } from "@/server/services/content";
 
-const roboto = Roboto({
+/* Figma uses Manrope for everything except a few small "Body/XS" Roboto bits. */
+const manrope = Manrope({
   subsets: ["latin"],
-  weight: ["400", "500", "700"],
-  variable: "--font-roboto",
+  weight: ["400", "500", "600", "700", "800"],
+  variable: "--ff-manrope",
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
-  title: {
-    default: siteConfig.title,
-    template: "%s | Stag Fencing Perth",
-  },
-  description: siteConfig.description,
-  applicationName: siteConfig.name,
-  keywords: siteConfig.keywords,
-  authors: [{ name: siteConfig.name, url: siteConfig.url }],
-  creator: siteConfig.name,
-  publisher: siteConfig.name,
-  category: "Home Improvement",
-  alternates: {
-    canonical: "/",
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_AU",
-    url: siteConfig.url,
-    siteName: siteConfig.name,
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [
-      {
-        url: siteConfig.ogImage,
-        width: 1200,
-        height: 800,
-        alt: "Stag Fencing — Perth fencing specialists",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.title,
-    description: siteConfig.description,
-    images: [siteConfig.ogImage],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--ff-roboto",
+  display: "swap",
+});
+
+/** Title/description are editable in Admin → Site settings.
+ *  getSettings() falls back to defaults if Mongo is unavailable. */
+export async function generateMetadata(): Promise<Metadata> {
+  const settings = await getSettings();
+
+  return {
+    metadataBase: new URL(siteConfig.url),
+    title: {
+      default: settings.seoTitle,
+      template: "%s | Stag Fencing Perth",
+    },
+    description: settings.seoDescription,
+    applicationName: siteConfig.name,
+    keywords: siteConfig.keywords,
+    authors: [{ name: siteConfig.name, url: siteConfig.url }],
+    creator: siteConfig.name,
+    publisher: siteConfig.name,
+    category: "Home Improvement",
+    alternates: {
+      canonical: "/",
+    },
+    openGraph: {
+      type: "website",
+      locale: "en_AU",
+      url: siteConfig.url,
+      siteName: siteConfig.name,
+      title: settings.seoTitle,
+      description: settings.seoDescription,
+      images: [
+        {
+          url: siteConfig.ogImage,
+          width: 1200,
+          height: 800,
+          alt: "Stag Fencing — Perth fencing specialists",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: settings.seoTitle,
+      description: settings.seoDescription,
+      images: [siteConfig.ogImage],
+    },
+    robots: {
       index: true,
       follow: true,
-      "max-image-preview": "large",
-      "max-snippet": -1,
-      "max-video-preview": -1,
+      googleBot: {
+        index: true,
+        follow: true,
+        "max-image-preview": "large",
+        "max-snippet": -1,
+        "max-video-preview": -1,
+      },
     },
-  },
-};
+  };
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en-AU" className="scroll-smooth">
-      <body className={`${roboto.variable} antialiased`}>
+      <body className={`${manrope.variable} ${roboto.variable} antialiased`}>
         {children}
-        <JsonLd data={businessJsonLd()} />
-        <JsonLd data={websiteJsonLd()} />
       </body>
     </html>
   );

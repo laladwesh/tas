@@ -1,15 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { faqs } from "@/data/faqs";
+import type { FaqDTO } from "@/server/services/content";
 
-export default function FaqSection() {
+export default function FaqSection({ faqs }: { faqs: FaqDTO[] }) {
   const [open, setOpen] = useState<boolean[]>(() =>
     faqs.map((faq) => Boolean(faq.defaultOpen))
   );
 
   const toggle = (index: number) =>
     setOpen((prev) => prev.map((value, i) => (i === index ? !value : value)));
+
+  if (faqs.length === 0) return null;
 
   return (
     <section className="w-full bg-[#E7E7E7] py-14 lg:py-20">
