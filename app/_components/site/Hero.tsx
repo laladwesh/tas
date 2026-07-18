@@ -121,7 +121,7 @@ export default function Hero({ settings }: { settings: SiteSettings }) {
       </div>
 
       {/* Founder quote card */}
-      <div className="absolute right-12 top-[219.5px] hidden items-center gap-[12px] overflow-hidden rounded-[4px] border border-white/20 bg-cool-20/20 p-[14px] shadow-[0_8px_32px_rgba(0,0,0,0.18)] backdrop-blur-md xl:right-20 xl:flex">
+      <div className="absolute right-12 top-[320px] hidden items-center gap-[12px] overflow-hidden rounded-[4px] border border-white/20 bg-cool-20/20 p-[14px] shadow-[0_8px_32px_rgba(0,0,0,0.18)] backdrop-blur-md xl:right-40 xl:flex">
         <div className="relative h-[100px] w-[104px] shrink-0 overflow-hidden rounded-[4px]">
           <Image
             src="/figma/founder.png"

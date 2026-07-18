@@ -30,7 +30,7 @@ export function Eyebrow({ children }: { children: ReactNode }) {
   return (
     <span className="inline-flex items-center justify-center gap-[8px] overflow-hidden rounded-[20px] border border-black/20 px-[20px] py-[4px]">
       <span aria-hidden className="size-[5px] shrink-0 rounded-full bg-brand" />
-      <span className="whitespace-nowrap text-[10px] font-bold uppercase leading-normal text-ink">
+      <span className="whitespace-nowrap text-[12px] font-bold uppercase leading-normal text-ink">
         {children}
       </span>
     </span>
@@ -103,7 +103,7 @@ export function SectionHeading({
           {title}
         </h2>
         {copy && (
-          <p className="max-w-[560px] text-[14px] leading-[1.4] text-black">
+          <p className="max-w-[560px] text-[16px] leading-[1.5] text-black">
             {copy}
           </p>
         )}
@@ -120,7 +120,7 @@ export function SectionHeading({
         </h2>
       </div>
       {copy && (
-        <p className="w-full text-[14px] leading-[1.4] text-black lg:max-w-[480px]">
+        <p className="w-full text-[16px] leading-[1.5] text-black lg:max-w-[480px]">
           {copy}
         </p>
       )}

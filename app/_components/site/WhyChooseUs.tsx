@@ -64,21 +64,21 @@ export default function WhyChooseUs() {
                     i < reasons.length - 1 ? "border-b-[0.5px] border-ink" : ""
                   }`}
                 >
-                  <div className="flex items-center gap-[4px]">
-                    <span className="relative size-[50px] shrink-0">
+                  <div className="flex items-center gap-[10px]">
+                    <span className="relative size-[30px] shrink-0">
                       <Image
                         src={reason.icon}
                         alt=""
                         fill
-                        sizes="50px"
+                        sizes="30px"
                         className="object-contain"
                       />
                     </span>
-                    <h3 className="text-[18px] font-normal leading-normal text-ink sm:text-[24px]">
+                    <h3 className="text-[20px] font-medium leading-normal text-ink sm:text-[22px]">
                       {reason.title}
                     </h3>
                   </div>
-                  <p className="text-[12px] leading-normal text-black/80">
+                  <p className="text-[14px] leading-[1.6] text-black/70">
                     {reason.description}
                   </p>
                 </li>
