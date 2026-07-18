@@ -23,13 +23,6 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
     () => Array.from(new Set(products.map((p) => p.category).filter(Boolean))).sort(),
     [products],
   );
-  const subCategories = useMemo(
-    () =>
-      Array.from(
-        new Set(products.map((p) => p.subCategory).filter(Boolean) as string[]),
-      ).sort(),
-    [products],
-  );
 
   const priceBounds = useMemo(() => {
     const values = products.map((p) => p.priceCents).filter((n) => n > 0);
@@ -40,27 +33,53 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
   }, [products]);
 
   const [search, setSearch] = useState("");
-  const [cats, setCats] = useState<Set<string>>(new Set());
+  // Single category; its subcategories (multi-select) show only once picked.
+  const [cat, setCat] = useState("");
   const [subs, setSubs] = useState<Set<string>>(new Set());
   const [maxPrice, setMaxPrice] = useState(priceBounds.max);
   const [sort, setSort] = useState("default");
   const [page, setPage] = useState(1);
   const [filtersOpen, setFiltersOpen] = useState(true);
 
-  const toggle = (set: Set<string>, value: string) => {
-    const next = new Set(set);
-    next.has(value) ? next.delete(value) : next.add(value);
-    return next;
-  };
+  // Sub-categories that exist within the selected category only.
+  const subCategories = useMemo(() => {
+    if (!cat) return [];
+    return Array.from(
+      new Set(
+        products
+          .filter((p) => p.category === cat)
+          .map((p) => p.subCategory)
+          .filter(Boolean) as string[],
+      ),
+    ).sort();
+  }, [products, cat]);
 
-  const hasFilters =
-    search || cats.size || subs.size || maxPrice < priceBounds.max;
+  const hasFilters = Boolean(
+    search || cat || subs.size || maxPrice < priceBounds.max,
+  );
 
   const reset = () => {
     setSearch("");
-    setCats(new Set());
+    setCat("");
     setSubs(new Set());
     setMaxPrice(priceBounds.max);
+    setPage(1);
+  };
+
+  // Pick a category (toggles off if re-clicked). Changing it clears subs,
+  // since sub-categories belong to a specific category.
+  const selectCategory = (name: string) => {
+    setCat((prev) => (prev === name ? "" : name));
+    setSubs(new Set());
+    setPage(1);
+  };
+
+  const toggleSub = (name: string) => {
+    setSubs((prev) => {
+      const next = new Set(prev);
+      next.has(name) ? next.delete(name) : next.add(name);
+      return next;
+    });
     setPage(1);
   };
 
@@ -70,7 +89,7 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
       const needle = search.toLowerCase();
       list = list.filter((p) => p.title.toLowerCase().includes(needle));
     }
-    if (cats.size) list = list.filter((p) => cats.has(p.category));
+    if (cat) list = list.filter((p) => p.category === cat);
     if (subs.size) list = list.filter((p) => p.subCategory && subs.has(p.subCategory));
     if (maxPrice < priceBounds.max) {
       list = list.filter((p) => p.priceCents <= maxPrice);
@@ -83,7 +102,7 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
       return 0;
     });
     return list;
-  }, [products, search, cats, subs, maxPrice, sort, priceBounds.max]);
+  }, [products, search, cat, subs, maxPrice, sort, priceBounds.max]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PER_PAGE));
   const current = Math.min(page, totalPages);
@@ -92,72 +111,72 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
   const from = filtered.length === 0 ? 0 : start + 1;
   const to = Math.min(start + PER_PAGE, filtered.length);
 
-  // Any filter change resets to page 1.
-  const onFilterChange = <T,>(setter: (v: T) => void) => (v: T) => {
-    setter(v);
+  const onSearch = (v: string) => {
+    setSearch(v);
     setPage(1);
   };
 
+  // Accessible sizing: pills at 16px (base), never below 14px.
   const pill = (active: boolean) =>
-    `rounded-[6px] px-[12px] py-[7px] text-left text-sm transition ${
+    `rounded-md px-3 py-2 text-left text-base transition ${
       active ? "bg-ink text-white" : "bg-white text-ink hover:bg-black/5"
     }`;
 
   return (
-    <div className="flex flex-col gap-8 lg:flex-row lg:gap-10">
-      {/* ---------------- Filter sidebar ---------------- */}
-      <aside className="w-full shrink-0 lg:w-[248px]">
-        <div className="rounded-[8px] bg-field p-[20px]">
-          <div className="mb-[16px] flex items-center justify-between">
+    <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-10">
+      {/* ---------------- Filter sidebar (sticky on desktop) ---------------- */}
+      <aside className="w-full shrink-0 lg:sticky lg:top-28 lg:w-64 lg:self-start">
+        <div className="rounded-lg bg-field p-5">
+          <div className="mb-4 flex items-center justify-between">
             <h2 className="text-base font-semibold text-ink">Filter Products</h2>
             <button
               type="button"
               onClick={() => (hasFilters ? reset() : setFiltersOpen((o) => !o))}
-              aria-label={hasFilters ? "Clear filters" : "Toggle filters"}
-              className="text-black/50 transition hover:text-black"
+              className="text-sm text-black/50 transition hover:text-black"
             >
-              {hasFilters ? "Clear" : <ChevronDownIcon className="size-[18px]" />}
+              {hasFilters ? "Clear" : <ChevronDownIcon className="size-5" />}
             </button>
           </div>
 
           {filtersOpen && (
-            <div className="flex flex-col gap-[20px]">
+            <div className="flex flex-col gap-6">
               {/* Price */}
               {priceBounds.max > 0 && (
                 <div>
-                  <p className="mb-[8px] text-sm font-medium text-black/70">Price</p>
+                  <p className="mb-2 text-base font-medium text-black/70">Price</p>
                   <input
                     type="range"
                     min={priceBounds.min}
                     max={priceBounds.max}
                     step={100}
                     value={maxPrice}
-                    onChange={(e) =>
-                      onFilterChange(setMaxPrice)(Number(e.target.value))
-                    }
+                    onChange={(e) => {
+                      setMaxPrice(Number(e.target.value));
+                      setPage(1);
+                    }}
                     className="w-full accent-brand"
+                    aria-label="Maximum price"
                   />
-                  <p className="mt-[6px] text-sm text-ink">
+                  <p className="mt-1.5 text-sm text-ink">
                     {money(priceBounds.min)} – {money(maxPrice)}
                   </p>
                 </div>
               )}
 
-              {/* Categories */}
+              {/* Categories — one at a time */}
               {categories.length > 0 && (
                 <div>
-                  <p className="mb-[8px] text-sm font-medium text-black/70">
+                  <p className="mb-2 text-base font-medium text-black/70">
                     Categories
                   </p>
-                  <div className="flex flex-col gap-[6px]">
+                  <div className="flex flex-col gap-1.5">
                     {categories.map((name) => (
                       <button
                         key={name}
                         type="button"
-                        onClick={() =>
-                          onFilterChange(setCats)(toggle(cats, name))
-                        }
-                        className={pill(cats.has(name))}
+                        aria-pressed={cat === name}
+                        onClick={() => selectCategory(name)}
+                        className={pill(cat === name)}
                       >
                         {name}
                       </button>
@@ -166,20 +185,19 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
                 </div>
               )}
 
-              {/* Sub Categories */}
-              {subCategories.length > 0 && (
+              {/* Sub Categories — only for the chosen category, multi-select */}
+              {cat && subCategories.length > 0 && (
                 <div>
-                  <p className="mb-[8px] text-sm font-medium text-black/70">
+                  <p className="mb-2 text-base font-medium text-black/70">
                     Sub Categories
                   </p>
-                  <div className="flex flex-col gap-[6px]">
+                  <div className="flex flex-col gap-1.5">
                     {subCategories.map((name) => (
                       <button
                         key={name}
                         type="button"
-                        onClick={() =>
-                          onFilterChange(setSubs)(toggle(subs, name))
-                        }
+                        aria-pressed={subs.has(name)}
+                        onClick={() => toggleSub(name)}
                         className={pill(subs.has(name))}
                       >
                         {name}
@@ -196,29 +214,33 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
       {/* ---------------- Products ---------------- */}
       <div className="flex-1">
         {/* Toolbar */}
-        <div className="mb-[24px] flex flex-col items-stretch gap-[12px] sm:flex-row sm:items-center sm:justify-between">
+        <div className="mb-6 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
           <p className="whitespace-nowrap text-sm text-black/60">
             Showing <span className="font-semibold text-ink">{from}–{to}</span> of{" "}
             {filtered.length} results
           </p>
 
-          <div className="flex flex-1 items-center gap-[12px] sm:max-w-[460px] sm:justify-end">
-            <div className="relative flex-1 sm:max-w-[280px]">
-              <SearchIcon className="pointer-events-none absolute left-[14px] top-1/2 size-[16px] -translate-y-1/2 text-black/40" />
+          <div className="flex flex-1 items-center gap-3 sm:max-w-md sm:justify-end">
+            <div className="relative flex-1 sm:max-w-xs">
+              <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-black/40" />
               <input
                 type="search"
                 value={search}
-                onChange={(e) => onFilterChange(setSearch)(e.target.value)}
+                onChange={(e) => onSearch(e.target.value)}
                 placeholder="Search"
-                className="h-[40px] w-full rounded-[48px] border border-black/15 bg-white pl-[38px] pr-[16px] text-sm outline-none transition focus:border-brand"
+                className="h-11 w-full rounded-full border border-black/15 bg-white pl-10 pr-4 text-base outline-none transition focus:border-brand"
               />
             </div>
 
             <div className="relative">
               <select
                 value={sort}
-                onChange={(e) => onFilterChange(setSort)(e.target.value)}
-                className="h-[40px] cursor-pointer appearance-none rounded-[48px] border border-black/15 bg-white pl-[16px] pr-[36px] text-sm outline-none transition focus:border-brand"
+                onChange={(e) => {
+                  setSort(e.target.value);
+                  setPage(1);
+                }}
+                className="h-11 cursor-pointer appearance-none rounded-full border border-black/15 bg-white pl-4 pr-9 text-base outline-none transition focus:border-brand"
+                aria-label="Sort products"
               >
                 {SORTS.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -226,7 +248,7 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
                   </option>
                 ))}
               </select>
-              <ChevronDownIcon className="pointer-events-none absolute right-[12px] top-1/2 size-[16px] -translate-y-1/2 text-black/50" />
+              <ChevronDownIcon className="pointer-events-none absolute right-3 top-1/2 size-4 -translate-y-1/2 text-black/50" />
             </div>
           </div>
         </div>
@@ -234,7 +256,7 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
         {/* Grid */}
         {pageItems.length === 0 ? (
           <div className="py-16 text-center">
-            <p className="text-sm text-black/60">No products match your filters.</p>
+            <p className="text-base text-black/60">No products match your filters.</p>
             {hasFilters && (
               <button
                 type="button"
@@ -246,10 +268,10 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
             )}
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-x-[20px] gap-y-[32px] md:grid-cols-3">
+          <div className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3">
             {pageItems.map((product) => (
-              <div key={product.slug} className="group flex flex-col gap-[8px]">
-                <div className="relative aspect-square w-full overflow-hidden rounded-[8px] bg-gray-100">
+              <div key={product.slug} className="group flex flex-col gap-2">
+                <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100">
                   <Image
                     src={product.image}
                     alt={product.title}
@@ -263,19 +285,19 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
                   />
                   <Link
                     href={`/shop/${product.slug}`}
-                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-[48px] bg-white px-[22px] py-[8px] text-sm font-medium tracking-[0.5px] text-black opacity-0 shadow-md transition-all duration-300 hover:scale-105 group-hover:opacity-100"
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white px-6 py-2 text-base font-medium tracking-wide text-black opacity-0 shadow-md transition-all duration-300 hover:scale-105 group-hover:opacity-100"
                   >
                     View
                   </Link>
                 </div>
-                <Link href={`/shop/${product.slug}`} className="flex flex-col gap-[2px]">
+                <Link href={`/shop/${product.slug}`} className="flex flex-col gap-0.5">
                   {product.category && (
-                    <p className="text-xs text-black/50">{product.category}</p>
+                    <p className="text-sm text-black/50">{product.category}</p>
                   )}
-                  <h3 className="line-clamp-2 text-base font-medium leading-[1.4] text-black">
+                  <h3 className="line-clamp-2 text-base font-medium leading-snug text-black">
                     {product.title}
                   </h3>
-                  <p className="text-sm text-black/70">{product.price}</p>
+                  <p className="text-base text-black/70">{product.price}</p>
                 </Link>
               </div>
             ))}
@@ -284,12 +306,13 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="mt-[40px] flex items-center justify-center gap-[8px]">
+          <div className="mt-10 flex items-center justify-center gap-2">
             <button
               type="button"
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={current === 1}
-              className="flex size-[36px] items-center justify-center rounded-full border border-black/15 text-sm transition hover:bg-black/5 disabled:opacity-40"
+              aria-label="Previous page"
+              className="flex size-9 items-center justify-center rounded-full border border-black/15 text-base transition hover:bg-black/5 disabled:opacity-40"
             >
               ‹
             </button>
@@ -298,7 +321,9 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
                 key={i}
                 type="button"
                 onClick={() => setPage(i + 1)}
-                className={`flex size-[36px] items-center justify-center rounded-full text-sm transition ${
+                aria-label={`Page ${i + 1}`}
+                aria-current={current === i + 1}
+                className={`flex size-9 items-center justify-center rounded-full text-base transition ${
                   current === i + 1
                     ? "bg-ink text-white"
                     : "border border-black/15 hover:bg-black/5"
@@ -311,7 +336,8 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
               type="button"
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={current === totalPages}
-              className="flex size-[36px] items-center justify-center rounded-full border border-black/15 text-sm transition hover:bg-black/5 disabled:opacity-40"
+              aria-label="Next page"
+              className="flex size-9 items-center justify-center rounded-full border border-black/15 text-base transition hover:bg-black/5 disabled:opacity-40"
             >
               ›
             </button>
