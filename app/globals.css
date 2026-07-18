@@ -102,11 +102,20 @@ a[class*="rounded-"]:active {
   transform: scale(0.985);
 }
 
-/* Visible, on-brand focus ring for keyboard users only. */
+/* Visible, on-brand focus ring for keyboard users only. The outline follows
+   each element's own border-radius automatically — do NOT set border-radius
+   here, or focusing a rounded input/button snaps its corners square. */
 :focus-visible {
   outline: 2px solid var(--color-brand);
   outline-offset: 2px;
-  border-radius: 2px;
+}
+
+/* Text fields: keep the focus ring tight to the field (no gap) and let it
+   follow the field's rounded corners, so it reads as a clean highlight. */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline-offset: 0;
 }
 
 ::selection {
