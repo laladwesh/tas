@@ -110,12 +110,17 @@ a[class*="rounded-"]:active {
   outline-offset: 2px;
 }
 
-/* Text fields: keep the focus ring tight to the field (no gap) and let it
-   follow the field's rounded corners, so it reads as a clean highlight. */
+/* Text fields already provide their own focus styling (a border/underline or
+   ring defined per component). Suppress the global brand outline on them so it
+   doesn't draw a hard red box around every input. Buttons/links keep the
+   outline above for keyboard accessibility. */
+input:focus,
 input:focus-visible,
+textarea:focus,
 textarea:focus-visible,
+select:focus,
 select:focus-visible {
-  outline-offset: 0;
+  outline: none;
 }
 
 ::selection {
