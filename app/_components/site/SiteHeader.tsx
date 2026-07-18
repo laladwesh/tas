@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SearchBox from "./SearchOverlay";
+import AccountMenu from "./AccountMenu";
 import {
   ArrowUpRightIcon,
   MailIcon,
@@ -11,7 +12,6 @@ import {
   ShoppingCartIcon,
   StagLogo,
   StagWordmark,
-  UserIcon,
 } from "@/components/icons";
 
 const navLinks = [
@@ -123,9 +123,7 @@ export default function SiteHeader({
                 </span>
               )}
             </Link>
-            <Link href="/login" aria-label="Account">
-              <UserIcon className="size-[20px]" />
-            </Link>
+            <AccountMenu />
           </div>
 
           <Link
