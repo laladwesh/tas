@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SearchOverlay from "./SearchOverlay";
@@ -40,6 +40,20 @@ export default function SiteHeader({
 }: Props) {
   const pathname = usePathname();
   const [searchOpen, setSearchOpen] = useState(false);
+
+  // Cart badge is per-user, so it's loaded client-side (keeps pages static).
+  // Re-fetch on navigation so it updates after add-to-cart redirects here.
+  const [count, setCount] = useState(cartCount);
+  useEffect(() => {
+    let alive = true;
+    fetch("/api/cart/count")
+      .then((r) => r.json())
+      .then((d) => alive && setCount(d.count ?? 0))
+      .catch(() => {});
+    return () => {
+      alive = false;
+    };
+  }, [pathname]);
 
   /** Longest matching nav href wins, so /services/colorbond marks "Services". */
   const active = navLinks
@@ -111,9 +125,9 @@ export default function SiteHeader({
             </button>
             <Link href="/cart" aria-label="Cart" className="relative">
               <ShoppingCartIcon className="size-[20px]" />
-              {cartCount > 0 && (
+              {count > 0 && (
                 <span className="absolute -right-2 -top-2 flex size-[16px] items-center justify-center rounded-full bg-brand text-[9px] font-bold text-white">
-                  {cartCount > 9 ? "9+" : cartCount}
+                  {count > 9 ? "9+" : count}
                 </span>
               )}
             </Link>
