@@ -8,6 +8,7 @@ import Process from "@/app/_components/site/Process";
 import ShopHighlights from "@/app/_components/site/ShopHighlights";
 import AboutUs from "@/app/_components/site/AboutUs";
 import Articles from "@/app/_components/site/Articles";
+import { Container } from "@/app/_components/site/ui";
 import JsonLd from "@/components/JsonLd";
 import Reveal from "@/components/Reveal";
 
@@ -52,11 +53,14 @@ export default async function Home() {
     <>
       <Hero settings={settings} />
 
-      {/* Quote card overlapping the bottom of the hero */}
-      <div className="relative z-10 flex justify-center px-5 lg:-mt-[100px]">
-        <Reveal className="flex w-full justify-center" delay={100}>
-          <HeroQuoteForm services={serviceCatalog.map((s) => s.title)} />
-        </Reveal>
+      {/* Quote card — same width as every other section, sitting just below
+          the hero (smaller overlap so it reads as its own block). */}
+      <div className="relative z-10 lg:-mt-[56px]">
+        <Container>
+          <Reveal delay={100}>
+            <HeroQuoteForm services={serviceCatalog.map((s) => s.title)} />
+          </Reveal>
+        </Container>
       </div>
 
       <Reveal>

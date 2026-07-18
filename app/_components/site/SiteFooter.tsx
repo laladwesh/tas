@@ -79,7 +79,7 @@ const locations = [
 export default function SiteFooter({ phoneDisplay, phoneHref }: Props) {
   return (
     <footer className="w-full bg-black">
-      <div className="mx-auto flex w-full flex-col gap-[32px] px-5 py-[32px] sm:px-8 lg:px-12 xl:px-20">
+      <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-[32px] px-5 py-[32px] sm:px-8 lg:px-12 xl:max-w-[1360px] xl:px-20 2xl:max-w-[1480px]">
         {/* Top CTA bar */}
         <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
           <div className="flex max-w-[495px] flex-col items-start text-white">
