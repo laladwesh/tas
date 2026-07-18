@@ -60,6 +60,15 @@ export const serviceSchema = z.object({
     .default([]),
   projectCategory: z.string().trim().default(""),
   productCategory: z.string().trim().default(""),
+  ranges: z
+    .array(
+      z.object({
+        name: z.string().default(""),
+        priceFrom: z.string().default(""),
+        image: z.string().default(""),
+      }),
+    )
+    .default([]),
   faqs: z
     .array(z.object({ question: z.string().default(""), answer: z.string().default("") }))
     .default([]),

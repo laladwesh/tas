@@ -81,6 +81,38 @@ const PROCESS = [
   { title: "Walkthrough", body: "You sign off, we log the warranty and leave the site clean." },
 ];
 
+/* Product ranges. A service WITH a range shows a range page before its detail;
+   a service WITHOUT one goes straight to the detail page. */
+const RANGES: Record<string, { name: string; priceFrom: string; image: string }[]> = {
+  "pool-fencing": [
+    { name: "Frameless Glass", priceFrom: "From $350 / m", image: IMG.whyUs },
+    { name: "Tubular Aluminium", priceFrom: "From $185 / m", image: IMG.services },
+    { name: "Perf Pool", priceFrom: "From $210 / m", image: IMG.shop(5) },
+    { name: "Frameless Batten", priceFrom: "From $340 / m", image: IMG.about },
+    { name: "Round Batten", priceFrom: "From $260 / m", image: IMG.project },
+    { name: "Barr Fencing", priceFrom: "From $185 / m", image: IMG.colorbond },
+  ],
+  "slat-fencing": [
+    { name: "Horizontal Slat", priceFrom: "From $185 / m", image: IMG.services },
+    { name: "Vertical Slat", priceFrom: "From $195 / m", image: IMG.about },
+    { name: "Blade Slat", priceFrom: "From $220 / m", image: IMG.whyUs },
+  ],
+  "retaining-walls": [
+    { name: "Fibrewall", priceFrom: "From $240 / m²", image: IMG.retain },
+    { name: "Alumawall", priceFrom: "From $290 / m²", image: IMG.services },
+  ],
+  "gates-automation": [
+    { name: "Swing Gates", priceFrom: "From $850", image: IMG.gates },
+    { name: "Sliding Gates", priceFrom: "From $1,450", image: IMG.gates },
+    { name: "Automation", priceFrom: "From $1,450", image: IMG.const },
+  ],
+  "security-fencing": [
+    { name: "Garrison", priceFrom: "From $135 / m", image: IMG.about },
+    { name: "Chainmesh", priceFrom: "From $65 / m", image: IMG.services },
+    { name: "Enclosures", priceFrom: "From $180 / m", image: IMG.whyUs },
+  ],
+};
+
 const services = [
   {
     slug: "colorbond-fencing", title: "Colorbond Fencing", priceFrom: "from $95 / lm", image: IMG.colorbond,
@@ -299,6 +331,7 @@ const services = [
   complianceTitle: COMPLIANCE_TITLE,
   compliance: COMPLIANCE,
   process: PROCESS,
+  ranges: RANGES[s.slug] ?? [],
   // Which Shop category the service's product-range grid pulls from.
   productCategory: ({
     "colorbond-fencing": "Color Bond Fencing",

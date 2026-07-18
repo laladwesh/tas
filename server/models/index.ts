@@ -87,6 +87,16 @@ const svcFaqSchema = new Schema(
   { question: { type: String, default: "" }, answer: { type: String, default: "" } },
   { _id: false },
 );
+/** A product line within a service (e.g. Pool Fencing → "Frameless Glass").
+ *  When a service has ranges, its card opens a range page before the detail. */
+const svcRangeSchema = new Schema(
+  {
+    name: { type: String, default: "" },
+    priceFrom: { type: String, default: "" }, // e.g. "From $350 / m"
+    image: { type: String, default: "" },
+  },
+  { _id: false },
+);
 
 const serviceSchema = new Schema(
   {
@@ -138,6 +148,9 @@ const serviceSchema = new Schema(
     faqs: { type: [svcFaqSchema], default: [] },
     /** 11 Areas we service. */
     areas: { type: [String], default: [] },
+    /** Product range — if present, the service card opens /services/<slug>/range
+     *  before the detail page. Empty = card goes straight to the detail. */
+    ranges: { type: [svcRangeSchema], default: [] },
   },
   { timestamps: true },
 );

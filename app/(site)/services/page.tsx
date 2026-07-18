@@ -41,7 +41,11 @@ export default async function ServicesPage() {
             {services.map((service) => (
               <Link
                 key={service.slug}
-                href={`/services/${service.slug}`}
+                href={
+                  service.ranges.length > 0
+                    ? `/services/${service.slug}/range`
+                    : `/services/${service.slug}`
+                }
                 className="group flex flex-col gap-[10px] transition-transform duration-300 ease-out hover:-translate-y-1 motion-reduce:transform-none"
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[6px] bg-gray-100">

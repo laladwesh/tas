@@ -122,6 +122,7 @@ export type AdminService = {
   productCategory: string;
   faqs: string;
   areas: string;
+  ranges: string;
 };
 
 /** Serialise the stored arrays back into the "one item / pipe-separated" text
@@ -185,6 +186,7 @@ export async function listAllServices(): Promise<AdminService[]> {
     productCategory: d.productCategory ?? "",
     faqs: joinRows(d.faqs, ["question", "answer"]),
     areas: joinLines(d.areas),
+    ranges: joinRows(d.ranges, ["name", "priceFrom", "image"]),
   }));
 }
 

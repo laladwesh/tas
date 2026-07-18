@@ -106,6 +106,7 @@ function serviceFields(fd: FormData) {
     productCategory: str(fd, "productCategory"),
     faqs: rows(fd, "faqs", ["question", "answer"]),
     areas: lines(fd, "areas"),
+    ranges: rows(fd, "ranges", ["name", "priceFrom", "image"]),
   };
 }
 

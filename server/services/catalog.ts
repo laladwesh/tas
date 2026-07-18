@@ -9,6 +9,7 @@ import {
   servicesFaqs,
   reviewsCatalog,
   type ServiceItem,
+  type ServiceRange,
   type ProductItem,
   type ArticleItem,
   type ProjectItem,
@@ -23,7 +24,7 @@ import {
    to the real backend is a seeding job — no component changes.
    =========================================================================== */
 
-export type { ServiceItem, ProductItem, ArticleItem, ProjectItem, ReviewItem };
+export type { ServiceItem, ServiceRange, ProductItem, ArticleItem, ProjectItem, ReviewItem };
 
 export type FaqItem = {
   question: string;
@@ -47,6 +48,11 @@ export async function getServiceCatalog(): Promise<ServiceItem[]> {
       priceFrom: d.priceFrom || d.price || "",
       image: d.image,
       excerpt: d.excerpt ?? "",
+      ranges: (d.ranges ?? []).map((r) => ({
+        name: r.name ?? "",
+        priceFrom: r.priceFrom ?? "",
+        image: r.image ?? "",
+      })),
     }));
   } catch (error) {
     console.error("[catalog] getServiceCatalog fell back to static:", error);
@@ -100,6 +106,11 @@ export async function getServiceDetail(slug: string): Promise<ServiceDetail | nu
       priceFrom: d.priceFrom || d.price || "",
       image: d.image,
       excerpt: d.excerpt ?? "",
+      ranges: (d.ranges ?? []).map((r) => ({
+        name: r.name ?? "",
+        priceFrom: r.priceFrom ?? "",
+        image: r.image ?? "",
+      })),
       body: d.body ?? "",
       intro: d.intro ?? "",
       priceValue: d.priceValue ?? "",

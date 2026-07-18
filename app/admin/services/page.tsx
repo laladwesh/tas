@@ -107,6 +107,11 @@ function RichServiceFields({ s = BLANK }: { s?: Partial<AdminService> }) {
             <textarea name="areas" rows={3} defaultValue={s.areas} className={ta} />
           </Field>
         </div>
+        <div className="sm:col-span-2">
+          <Field label="Range — one per line: name | From $X / m | /image.jpg  (if set, the service card opens a range page first)">
+            <textarea name="ranges" rows={5} defaultValue={s.ranges} placeholder="Frameless Glass | From $350 / m | /figma/shop/1.png" className={ta} />
+          </Field>
+        </div>
       </div>
     </details>
   );
