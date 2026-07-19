@@ -507,6 +507,22 @@ const products = [
   { slug: "colorbond-fence-post", title: "Colorbond Fence Post – 2400mm (In-Ground)", price: "$38.50 – $52.00", priceCents: 3850, image: IMG.colorbond, category: "Color Bond Fencing", homeRow: "", stock: 300, trackStock: true },
   { slug: "colorbond-post-cap", title: "Colorbond Post Cap – 50 x 50mm", price: "$8.90", priceCents: 890, image: IMG.shop(3), category: "Color Bond Fencing", homeRow: "", stock: 500, trackStock: true },
   { slug: "touch-up-paint-spray", title: "Touch Up Paint – 300g Spray Can", price: "$17.90", priceCents: 1790, image: IMG.const, category: "Color Bond Fencing", homeRow: "", stock: 120, trackStock: true },
+  // More stock so the shop has 3 pages and every category/sub-category filters.
+  { slug: "aluminium-slat-100", title: "Aluminium Slat – 100 x 16.5 x 6100mm", price: "$72.00", priceCents: 7200, image: IMG.shop(1), category: "Slat Fencing", homeRow: "popular", stock: 160, trackStock: true },
+  { slug: "slat-post-aluminium", title: "Aluminium Slat Post – 65 x 65 x 2400mm", price: "$44.00", priceCents: 4400, image: IMG.shop(1), category: "Slat Fencing", homeRow: "", stock: 210, trackStock: true },
+  { slug: "privacy-slat-screen", title: "Privacy Slat Screen – 1800 x 1800mm", price: "$320.00", priceCents: 32000, image: IMG.services, category: "Slat Fencing", homeRow: "affordable", stock: 24, trackStock: true },
+  { slug: "colorbond-panel-18m", title: "Colorbond Fencing Panel – 1.8m", price: "$79.00 – $112.00", priceCents: 7900, image: IMG.shop(2), category: "Color Bond Fencing", homeRow: "", stock: 95, trackStock: true },
+  { slug: "colorbond-rail", title: "Colorbond® Rail – 2.4m", price: "$14.50", priceCents: 1450, image: IMG.shop(3), category: "Color Bond Fencing", homeRow: "", stock: 400, trackStock: true },
+  { slug: "pvc-picket-panel", title: "PVC – Picket Panel 2400 x 1200mm", price: "$118.00", priceCents: 11800, image: IMG.shop(4), category: "PVC Fencing", homeRow: "affordable", stock: 40, trackStock: true },
+  { slug: "pvc-post-cap", title: "PVC Post Cap – New England", price: "$6.50", priceCents: 650, image: IMG.shop(4), category: "PVC Fencing", homeRow: "", stock: 600, trackStock: true },
+  { slug: "pool-glass-panel", title: "Frameless Glass Panel – 12mm 1200 x 1000mm", price: "$165.00", priceCents: 16500, image: IMG.whyUs, category: "Pool Fencing", homeRow: "popular", stock: 30, trackStock: true },
+  { slug: "pool-spigot", title: "Stainless Glass Spigot – core-mount", price: "$28.00", priceCents: 2800, image: IMG.shop(5), category: "Pool Fencing", homeRow: "", stock: 220, trackStock: true },
+  { slug: "gate-hinges-heavy", title: "Heavy-Duty Gate Hinges – pair", price: "$34.00", priceCents: 3400, image: IMG.gates, category: "Gates & Hardware", homeRow: "", stock: 90, trackStock: true },
+  { slug: "gate-motor-swing", title: "Swing Gate Motor – dual arm + remotes", price: "$1,690.00", priceCents: 169000, image: IMG.gates, category: "Gates & Hardware", homeRow: "", stock: 4, trackStock: true },
+  { slug: "limestone-block", title: "Limestone Block – 500 x 350 x 200mm", price: "$28.50", priceCents: 2850, image: IMG.retain, category: "Retaining Walls", homeRow: "affordable", stock: 260, trackStock: true },
+  { slug: "galv-h-post", title: "Galvanised H-Post – 2.0m", price: "$32.00", priceCents: 3200, image: IMG.retain, category: "Retaining Walls", homeRow: "", stock: 140, trackStock: true },
+  { slug: "tek-screws", title: "Tek Screws – 10g x 16mm (250 pack)", price: "$24.00", priceCents: 2400, image: IMG.const, category: "Accessories", homeRow: "", stock: 300, trackStock: true },
+  { slug: "concrete-20kg", title: "Concrete Mix – 20kg bag", price: "$9.90", priceCents: 990, image: IMG.const, category: "Accessories", homeRow: "", stock: 500, trackStock: true },
 ];
 
 const articles = [
@@ -606,6 +622,13 @@ const projects = [
   { title: "Asbestos fence replacement", image: IMG.asbestos, category: "Asbestos", suburb: "Balga", featured: false },
   { title: "Commercial site fencing", image: IMG.about, category: "Security", suburb: "Malaga", featured: false },
   { title: "Front yard picket", image: IMG.hero1, category: "Timber", suburb: "Mount Lawley", featured: false },
+  { title: "Colorbond with sleeper plinth", image: IMG.retain, category: "Colorbond", suburb: "Kingsley", featured: false },
+  { title: "Aluminium slat gate & fence", image: IMG.services, category: "Slat", suburb: "Wembley", featured: true },
+  { title: "Glass pool fence & gate", image: IMG.whyUs, category: "Pool", suburb: "Sorrento", featured: false },
+  { title: "Fibrewall retaining, two courses", image: IMG.retain, category: "Retaining", suburb: "Kalamunda", featured: false },
+  { title: "Garrison security run", image: IMG.about, category: "Security", suburb: "Welshpool", featured: false },
+  { title: "Automated swing gates", image: IMG.gates, category: "Gates", suburb: "Applecross", featured: true },
+  { title: "Colorbond side & rear boundary", image: IMG.colorbond, category: "Colorbond", suburb: "Canning Vale", featured: false },
 ];
 
 const reviews = [
@@ -615,6 +638,10 @@ const reviews = [
   { name: "Sandra Schmid", role: "Home Owner", rating: "5.0", quote: "The quote was clear, the crew turned up when they said they would, and the site was spotless when they left.", image: IMG.review(4), avatar: IMG.avatar(4) },
   { name: "Tom Petrides", role: "Builder", rating: "5.0", quote: "We use Stag on all our new builds now. They hit the dates, which is the whole game for us.", image: IMG.project, avatar: IMG.avatar(1) },
   { name: "Rachel Nguyen", role: "Home Owner", rating: "4.8", quote: "Retaining wall and fence done together, in the right order. Saved us a headache and probably money.", image: IMG.retain, avatar: IMG.avatar(2) },
+  { name: "Daniel R.", role: "Home Owner", rating: "5.0", quote: "Old asbestos fence gone and new Monument Colorbond up in two days. One fixed price, no surprises on the invoice.", image: IMG.colorbond, avatar: IMG.avatar(3) },
+  { name: "Meg & Tony", role: "Home Owners", rating: "4.0", quote: "Matched the neighbour's colour perfectly and shared the cost paperwork for us. Rain pushed the start back a day, hence four stars.", image: IMG.whyUs, avatar: IMG.avatar(4) },
+  { name: "Sarah M.", role: "Home Owner", rating: "5.0", quote: "Quoted Tuesday, fence up the following Friday. Crew cemented every post and left the yard cleaner than they found it.", image: IMG.services, avatar: IMG.avatar(1) },
+  { name: "Priya N.", role: "Home Owner", rating: "5.0", quote: "Frameless glass around the pool looks incredible and passed the compliance inspection first go.", image: IMG.whyUs, avatar: IMG.avatar(2) },
 ];
 
 const faqs = [
@@ -705,6 +732,21 @@ async function main() {
     "colorbond-fence-post": "Posts & rails",
     "colorbond-post-cap": "Posts & rails",
     "touch-up-paint-spray": "Accessories",
+    "aluminium-slat-100": "Slat panels",
+    "slat-post-aluminium": "Posts & rails",
+    "privacy-slat-screen": "Screens",
+    "colorbond-panel-18m": "Panels",
+    "colorbond-rail": "Posts & rails",
+    "pvc-picket-panel": "Panels",
+    "pvc-post-cap": "Caps & fittings",
+    "pool-glass-panel": "Glass",
+    "pool-spigot": "Hardware",
+    "gate-hinges-heavy": "Hardware",
+    "gate-motor-swing": "Automation",
+    "limestone-block": "Blocks",
+    "galv-h-post": "Posts & rails",
+    "tek-screws": "Fixings",
+    "concrete-20kg": "Accessories",
   };
 
   // Rich product-detail-page content. Colorbond panel fully matches the Figma;
