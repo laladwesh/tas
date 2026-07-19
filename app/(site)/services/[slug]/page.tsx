@@ -240,28 +240,40 @@ export default async function ServiceDetailPage({ params }: Params) {
               {service.heightsTitle || "Heights & pricing"}
             </h2>
             <div className="grid grid-cols-2 gap-[12px] md:grid-cols-4">
-              {service.heights.map((height) => (
-                <div
-                  key={height.label}
-                  className={`relative flex flex-col gap-[8px] rounded-[6px] border p-[16px] ${
-                    height.popular
-                      ? "border-ink bg-white"
-                      : "border-cool-20 bg-white"
-                  }`}
-                >
-                  {height.popular && (
-                    <span className="absolute right-[12px] top-[12px] rounded-full bg-ink px-[8px] py-[2px] text-xs font-medium uppercase tracking-[0.5px] text-white">
-                      Most popular
+              {service.heights.map((height) => {
+                const popular = height.popular;
+                return (
+                  <div
+                    key={height.label}
+                    className={`relative flex flex-col gap-[12px] rounded-[8px] border p-[16px] ${
+                      popular
+                        ? "border-ink bg-ink text-white"
+                        : "border-cool-20 bg-white text-ink"
+                    }`}
+                  >
+                    {popular && (
+                      <span className="absolute right-[12px] top-[12px] rounded-full bg-white px-[8px] py-[2px] text-[10px] font-medium text-ink">
+                        Most popular
+                      </span>
+                    )}
+                    {/* Fence-panel bars motif */}
+                    <div className="flex h-[40px] items-stretch gap-[3px]">
+                      {Array.from({ length: 9 }).map((_, i) => (
+                        <span
+                          key={i}
+                          className={`flex-1 rounded-[1px] ${
+                            popular ? "bg-white/70" : "bg-black/20"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                    <span className="text-lg font-semibold">{height.label}</span>
+                    <span className={`text-sm ${popular ? "text-white/70" : "text-black/60"}`}>
+                      {height.priceLabel}
                     </span>
-                  )}
-                  <span className="mt-[24px] text-xl font-semibold text-ink">
-                    {height.label}
-                  </span>
-                  <span className="text-sm text-black/60">
-                    {height.priceLabel}
-                  </span>
-                </div>
-              ))}
+                  </div>
+                );
+              })}
             </div>
           </Container>
         </section>
