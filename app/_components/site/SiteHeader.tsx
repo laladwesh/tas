@@ -38,6 +38,12 @@ export default function SiteHeader({
   cartCount = 0,
 }: Props) {
   const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Close the mobile menu whenever the route changes.
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
 
   // Cart badge is per-user, so it's loaded client-side (keeps pages static).
   // Re-fetch on navigation so it updates after add-to-cart redirects here.
@@ -132,8 +138,8 @@ export default function SiteHeader({
           </div>
 
           <Link
-            href="#quote"
-            className="flex items-center gap-[6px] overflow-hidden rounded-[48px] bg-ink py-[4px] pl-[16px] pr-[4px]"
+            href="/#quote"
+            className="hidden items-center gap-[6px] overflow-hidden rounded-[48px] bg-ink py-[4px] pl-[16px] pr-[4px] sm:flex"
           >
             <span className="whitespace-nowrap text-[14px] leading-none tracking-[0.5px] text-white">
               Get My Free Quote
@@ -142,8 +148,50 @@ export default function SiteHeader({
               <ArrowUpRightIcon className="size-[20px] text-ink" />
             </span>
           </Link>
+
+          {/* Hamburger — only when the inline links are hidden (< lg). */}
+          <button
+            type="button"
+            aria-label="Menu"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((o) => !o)}
+            className="flex size-[40px] items-center justify-center rounded-full text-ink lg:hidden"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" className="size-[22px]">
+              {menuOpen ? (
+                <path d="M6 6l12 12M18 6L6 18" />
+              ) : (
+                <path d="M4 7h16M4 12h16M4 17h16" />
+              )}
+            </svg>
+          </button>
         </div>
       </nav>
+
+      {/* Mobile menu panel */}
+      {menuOpen && (
+        <div className="mt-[8px] flex flex-col gap-[2px] rounded-[16px] bg-cool-10 p-[10px] shadow-lg lg:hidden">
+          {navLinks.map((link) => (
+            <Link
+              key={link.label}
+              href={link.href}
+              className={`rounded-[10px] px-[16px] py-[12px] text-[15px] transition-colors ${
+                active === link.label
+                  ? "bg-ink text-white"
+                  : "text-ink hover:bg-black/5"
+              }`}
+            >
+              {link.label}
+            </Link>
+          ))}
+          <Link
+            href="/#quote"
+            className="mt-[4px] rounded-[10px] bg-brand px-[16px] py-[12px] text-center text-[15px] font-semibold text-white"
+          >
+            Get My Free Quote
+          </Link>
+        </div>
+      )}
     </header>
   );
 }
