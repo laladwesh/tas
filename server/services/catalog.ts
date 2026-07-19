@@ -76,7 +76,13 @@ export async function getServiceBySlug(slug: string): Promise<ServiceItem | null
    the page hides any section whose array is empty. */
 export type ServiceStat = { value: string; label: string };
 export type ServiceSwatch = { name: string; hex: string };
-export type TileVisual = "solid" | "gapped" | "glass" | "radiator" | "sleeper";
+export type TileVisual =
+  | "solid"
+  | "gapped"
+  | "glass"
+  | "radiator"
+  | "sleeper"
+  | "mesh";
 export type ServiceHeight = {
   label: string;
   priceLabel: string;

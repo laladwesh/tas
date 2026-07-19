@@ -158,7 +158,7 @@ const childServices = [
   // Pool Fencing range
   mkChild({
     parentSlug: "pool-fencing", slug: "frameless-glass-pool", title: "Frameless Glass Pool Fencing",
-    priceFrom: "from $350 / m", priceValue: "$350", image: IMG.whyUs,
+    priceFrom: "from $290 / m", priceValue: "$290", image: IMG.whyUs,
     excerpt: "Frameless toughened glass — an uninterrupted view of the pool, certified to AS 1926.1.",
     intro: "Frameless glass pool fencing gives you the clearest possible view of the water with no top rail and minimal spigots — supplied and installed to AS 1926.1.",
     projectCategory: "Pool",
@@ -178,10 +178,10 @@ const childServices = [
     ],
     heightsTitle: "Styles & pricing",
     heights: [
-      { label: "Semi-frameless (budget)", priceLabel: "from $240 / m", popular: false, visual: "glass" },
-      { label: "Channel-fixed frameless", priceLabel: "from $340 / m", popular: false, visual: "glass" },
-      { label: "Spigot-fixed frameless", priceLabel: "from $390 / m", popular: true, visual: "glass" },
-      { label: "Frameless glass gates", priceLabel: "from $590 / gate", popular: false, visual: "glass" },
+      { label: "Semi-frameless (budget)", priceLabel: "from $240 / lm", popular: false, visual: "gapped" },
+      { label: "Channel-fixed frameless", priceLabel: "from $340 / lm", popular: false, visual: "glass" },
+      { label: "Spigot-fixed frameless", priceLabel: "from $290 / lm", popular: true, visual: "glass" },
+      { label: "Frameless glass gates", priceLabel: "from $980 / gate", popular: false, visual: "solid" },
     ],
     includes: ["Free on-site measure & fixed written quote", "Toughened glass panels to AS 1926.1", "Marine-grade spigots & hardware", "Self-closing, self-latching gate", "Compliance-ready on handover"],
     addons: ["Compliance inspection & certificate", "Mitred glass corners", "Gate soft-close upgrade"],

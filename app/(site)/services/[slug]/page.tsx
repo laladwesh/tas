@@ -31,40 +31,90 @@ export const revalidate = 60;
  * solid bars (Colorbond), gapped bars (batten/tubular), glass panels,
  * radiator blades (fine bars), or horizontal sleeper courses.
  */
-function TileBars({ visual, popular }: { visual: string; popular: boolean }) {
-  const bar = popular ? "bg-white/70" : "bg-black/20";
+const TILE_FILL = "#4C4E4A";
 
+/**
+ * Pricing-tile illustration (TileVisual), rendered as SVG so it stays crisp
+ * and fills any tile width. These are the DEFAULTS per visual type; custom
+ * per-tile artwork can be added later.
+ */
+function TileBars({ visual }: { visual: string }) {
+  const cls = "h-[44px] w-full";
+
+  // Vertical posts + top/bottom rails (Colorbond panel).
+  if (visual === "solid") {
+    return (
+      <svg viewBox="0 0 138 52" preserveAspectRatio="none" className={cls}>
+        <rect width="138" height="5" rx="2" fill={TILE_FILL} fillOpacity="0.9" />
+        <rect y="47" width="138" height="5" rx="2" fill={TILE_FILL} fillOpacity="0.9" />
+        {[8, 28, 48, 68, 88, 108, 128].map((x) => (
+          <rect key={x} x={x} y="6" width="5" height="40" rx="2" fill={TILE_FILL} fillOpacity="0.9" />
+        ))}
+      </svg>
+    );
+  }
+
+  // Diagonal cross-hatch (chainmesh / lattice).
+  if (visual === "mesh") {
+    return (
+      <svg viewBox="0 0 126 48" preserveAspectRatio="none" className={cls}>
+        {Array.from({ length: 18 }).map((_, i) => {
+          const x = i * 14 - 56;
+          return (
+            <g key={i} stroke={TILE_FILL} strokeOpacity="0.8" strokeWidth="1.6">
+              <line x1={x} y1="48" x2={x + 48} y2="0" />
+              <line x1={x + 48} y1="48" x2={x} y2="0" />
+            </g>
+          );
+        })}
+      </svg>
+    );
+  }
+
+  // Horizontal courses (retaining sleepers).
   if (visual === "sleeper") {
     return (
-      <div className="flex h-[40px] w-full flex-col justify-center gap-[5px]">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <span key={i} className={`h-[6px] w-full rounded-[1px] ${bar}`} />
+      <svg viewBox="0 0 138 52" preserveAspectRatio="none" className={cls}>
+        {[0, 16, 32, 47].map((y) => (
+          <rect key={y} y={y} width="138" height="5" rx="2" fill={TILE_FILL} fillOpacity="0.9" />
         ))}
-      </div>
+      </svg>
     );
   }
+
+  // Glass panels with spigots.
   if (visual === "glass") {
     return (
-      <div className="flex h-[40px] w-full items-stretch gap-[4px]">
-        {Array.from({ length: 3 }).map((_, i) => (
-          <span
-            key={i}
-            className={`flex-1 rounded-[2px] border ${
-              popular ? "border-white/50 bg-white/10" : "border-black/15 bg-black/5"
-            }`}
-          />
+      <svg viewBox="0 0 138 48" preserveAspectRatio="none" className={cls}>
+        {[3, 49, 95].map((x) => (
+          <rect key={x} x={x} y="2" width="40" height="40" rx="2" fill="#dbeafe" stroke="#93c5fd" strokeWidth="1.5" />
         ))}
-      </div>
+        {[23, 69, 115].map((x) => (
+          <rect key={`s${x}`} x={x} y="43" width="4" height="5" rx="1" fill={TILE_FILL} fillOpacity="0.9" />
+        ))}
+      </svg>
     );
   }
-  const count = visual === "radiator" ? 16 : visual === "gapped" ? 6 : 9;
-  const gap = visual === "gapped" ? "gap-[6px]" : visual === "radiator" ? "gap-[2px]" : "gap-[3px]";
+
+  // Bars with visible gaps (batten/tubular) vs many fine bars (radiator).
+  const count = visual === "radiator" ? 18 : 6;
+  const w = visual === "radiator" ? 3 : 10;
+  const step = 138 / count;
   return (
-    <div className={`flex h-[40px] w-full items-stretch ${gap}`}>
+    <svg viewBox="0 0 138 48" preserveAspectRatio="none" className={cls}>
       {Array.from({ length: count }).map((_, i) => (
-        <span key={i} className={`flex-1 rounded-[1px] ${bar}`} />
+        <rect
+          key={i}
+          x={i * step + (step - w) / 2}
+          y="0"
+          width={w}
+          height="48"
+          rx="2"
+          fill={TILE_FILL}
+          fillOpacity="0.8"
+        />
       ))}
-    </div>
+    </svg>
   );
 }
 
@@ -287,22 +337,20 @@ export default async function ServiceDetailPage({ params }: Params) {
                 return (
                   <div
                     key={height.label}
-                    className={`relative flex flex-col gap-[12px] rounded-[8px] border p-[16px] ${
+                    className={`relative flex flex-col gap-[12px] rounded-[8px] bg-white p-[16px] text-ink ${
                       popular
-                        ? "border-ink bg-ink text-white"
-                        : "border-cool-20 bg-white text-ink"
+                        ? "border-2 border-ink"
+                        : "border border-cool-20"
                     }`}
                   >
                     {popular && (
-                      <span className="absolute right-[12px] top-[12px] rounded-full bg-white px-[8px] py-[2px] text-[10px] font-medium text-ink">
+                      <span className="absolute right-[12px] top-[12px] rounded-full bg-ink px-[8px] py-[2px] text-[10px] font-medium text-white">
                         Most popular
                       </span>
                     )}
-                    <TileBars visual={height.visual} popular={popular} />
+                    <TileBars visual={height.visual} />
                     <span className="text-lg font-semibold">{height.label}</span>
-                    <span className={`text-sm ${popular ? "text-white/70" : "text-black/60"}`}>
-                      {height.priceLabel}
-                    </span>
+                    <span className="text-sm text-black/60">{height.priceLabel}</span>
                   </div>
                 );
               })}
