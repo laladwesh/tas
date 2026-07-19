@@ -6,20 +6,14 @@
    section simply doesn't render — we never invent placeholder content.
    =========================================================================== */
 
-export type ServiceRange = {
-  name: string;
-  priceFrom: string;
-  image: string;
-};
-
 export type ServiceItem = {
   slug: string;
   title: string;
   priceFrom: string;
   image: string;
   excerpt: string;
-  /** Product lines under this service. Non-empty = card opens a range page. */
-  ranges: ServiceRange[];
+  /** Set = this is a range item (child) of the parent service with this slug. */
+  parentSlug: string;
 };
 
 export type ProductItem = {

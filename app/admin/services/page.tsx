@@ -55,6 +55,9 @@ function RichServiceFields({ s = BLANK }: { s?: Partial<AdminService> }) {
             <textarea name="stats" rows={4} defaultValue={s.stats} className={ta} />
           </Field>
         </div>
+        <Field label='Colours section title (e.g. "Pick your colour", "Sleeper finishes")'>
+          <input name="coloursTitle" defaultValue={s.coloursTitle} placeholder="Pick your colour" className={inputClass} />
+        </Field>
         <Field label='Colours note (e.g. "All 9 colours in stock")'>
           <input name="coloursNote" defaultValue={s.coloursNote} className={inputClass} />
         </Field>
@@ -63,18 +66,27 @@ function RichServiceFields({ s = BLANK }: { s?: Partial<AdminService> }) {
             <textarea name="colours" rows={4} defaultValue={s.colours} className={ta} />
           </Field>
         </div>
+        <Field label='Sizes section title (e.g. "Heights & pricing", "Sleeper sizes & pricing", "Styles & pricing")'>
+          <input name="heightsTitle" defaultValue={s.heightsTitle} placeholder="Heights & pricing" className={inputClass} />
+        </Field>
         <div className="sm:col-span-2">
-          <Field label="Heights — one per line: label | price | popular?   (e.g. 1800mm | from $104 / lm | yes)">
+          <Field label="Sizes — one per line: label | price | popular?   (e.g. 1800mm | from $104 / lm | yes)">
             <textarea name="heights" rows={4} defaultValue={s.heights} className={ta} />
           </Field>
         </div>
+        <Field label='"Includes" section title (default "Every install includes")'>
+          <input name="includesTitle" defaultValue={s.includesTitle} placeholder="Every install includes" className={inputClass} />
+        </Field>
+        <Field label='"Add-ons" section title (default "Popular add-ons")'>
+          <input name="addonsTitle" defaultValue={s.addonsTitle} placeholder="Popular add-ons" className={inputClass} />
+        </Field>
         <div>
-          <Field label="Every install includes — one per line">
+          <Field label="Includes list — one per line">
             <textarea name="includes" rows={4} defaultValue={s.includes} className={ta} />
           </Field>
         </div>
         <div>
-          <Field label="Popular add-ons — one per line">
+          <Field label="Add-ons list — one per line">
             <textarea name="addons" rows={4} defaultValue={s.addons} className={ta} />
           </Field>
         </div>
@@ -86,6 +98,12 @@ function RichServiceFields({ s = BLANK }: { s?: Partial<AdminService> }) {
             <textarea name="compliance" rows={3} defaultValue={s.compliance} className={ta} />
           </Field>
         </div>
+        <Field label='Process section title (default "From first call to last panel")'>
+          <input name="processTitle" defaultValue={s.processTitle} placeholder="From first call to last panel" className={inputClass} />
+        </Field>
+        <Field label='Reviews section title (default "What Perth homeowners say")'>
+          <input name="reviewsTitle" defaultValue={s.reviewsTitle} placeholder="What Perth homeowners say" className={inputClass} />
+        </Field>
         <div className="sm:col-span-2">
           <Field label="Process steps — one per line: title | description">
             <textarea name="process" rows={4} defaultValue={s.process} className={ta} />
@@ -108,8 +126,8 @@ function RichServiceFields({ s = BLANK }: { s?: Partial<AdminService> }) {
           </Field>
         </div>
         <div className="sm:col-span-2">
-          <Field label="Range — one per line: name | From $X / m | /image.jpg  (if set, the service card opens a range page first)">
-            <textarea name="ranges" rows={5} defaultValue={s.ranges} placeholder="Frameless Glass | From $350 / m | /figma/shop/1.png" className={ta} />
+          <Field label="Parent service slug (leave blank for a top-level service). Set this to make this service a RANGE ITEM of another — e.g. parent 'pool-fencing'.">
+            <input name="parentSlug" defaultValue={s.parentSlug} placeholder="pool-fencing" className={inputClass} />
           </Field>
         </div>
       </div>

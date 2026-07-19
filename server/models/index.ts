@@ -87,16 +87,6 @@ const svcFaqSchema = new Schema(
   { question: { type: String, default: "" }, answer: { type: String, default: "" } },
   { _id: false },
 );
-/** A product line within a service (e.g. Pool Fencing → "Frameless Glass").
- *  When a service has ranges, its card opens a range page before the detail. */
-const svcRangeSchema = new Schema(
-  {
-    name: { type: String, default: "" },
-    priceFrom: { type: String, default: "" }, // e.g. "From $350 / m"
-    image: { type: String, default: "" },
-  },
-  { _id: false },
-);
 
 const serviceSchema = new Schema(
   {
@@ -127,19 +117,28 @@ const serviceSchema = new Schema(
     badges: { type: [String], default: [] }, // "Licensed & insured", ...
     /** 02 Stats row. */
     stats: { type: [svcStatSchema], default: [] },
-    /** 03 Colours. */
+    /** 03 Colours — title varies per service ("Pick your colour",
+     *  "Sleeper finishes", "Frame & hardware finishes"…). */
+    coloursTitle: { type: String, default: "" },
     coloursNote: { type: String, default: "" },
     colours: { type: [svcSwatchSchema], default: [] },
-    /** 04 Heights & pricing. */
+    /** 04 Sizes & pricing — title varies ("Heights & pricing",
+     *  "Sleeper sizes & pricing", "Styles & pricing"…). */
+    heightsTitle: { type: String, default: "" },
     heights: { type: [svcHeightSchema], default: [] },
-    /** 05 Included & add-ons. */
+    /** 05 Included & add-ons — editable section titles. */
+    includesTitle: { type: String, default: "" },
     includes: { type: [String], default: [] },
+    addonsTitle: { type: String, default: "" },
     addons: { type: [String], default: [] },
     /** 06 WA compliance. */
     complianceTitle: { type: String, default: "" },
     compliance: { type: [String], default: [] },
     /** 07 Process. */
+    processTitle: { type: String, default: "" },
     process: { type: [svcStepSchema], default: [] },
+    /** 09 Reviews heading. */
+    reviewsTitle: { type: String, default: "" },
     /** 08 Recent projects — which Project.category to pull in. */
     projectCategory: { type: String, default: "" },
     /** Product range grid — which Product.category to show for this service. */
@@ -148,9 +147,10 @@ const serviceSchema = new Schema(
     faqs: { type: [svcFaqSchema], default: [] },
     /** 11 Areas we service. */
     areas: { type: [String], default: [] },
-    /** Product range — if present, the service card opens /services/<slug>/range
-     *  before the detail page. Empty = card goes straight to the detail. */
-    ranges: { type: [svcRangeSchema], default: [] },
+    /** If set, this service is a RANGE ITEM of the parent service (by slug).
+     *  A parent with children shows a range grid; each child is its own full
+     *  detail page. Empty = a top-level service. */
+    parentSlug: { type: String, default: "", index: true },
   },
   { timestamps: true },
 );

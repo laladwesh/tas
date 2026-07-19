@@ -81,37 +81,169 @@ const PROCESS = [
   { title: "Walkthrough", body: "You sign off, we log the warranty and leave the site clean." },
 ];
 
-/* Product ranges. A service WITH a range shows a range page before its detail;
-   a service WITHOUT one goes straight to the detail page. */
-const RANGES: Record<string, { name: string; priceFrom: string; image: string }[]> = {
-  "pool-fencing": [
-    { name: "Frameless Glass", priceFrom: "From $350 / m", image: IMG.whyUs },
-    { name: "Tubular Aluminium", priceFrom: "From $185 / m", image: IMG.services },
-    { name: "Perf Pool", priceFrom: "From $210 / m", image: IMG.shop(5) },
-    { name: "Frameless Batten", priceFrom: "From $340 / m", image: IMG.about },
-    { name: "Round Batten", priceFrom: "From $260 / m", image: IMG.project },
-    { name: "Barr Fencing", priceFrom: "From $185 / m", image: IMG.colorbond },
-  ],
-  "slat-fencing": [
-    { name: "Horizontal Slat", priceFrom: "From $185 / m", image: IMG.services },
-    { name: "Vertical Slat", priceFrom: "From $195 / m", image: IMG.about },
-    { name: "Blade Slat", priceFrom: "From $220 / m", image: IMG.whyUs },
-  ],
-  "retaining-walls": [
-    { name: "Fibrewall", priceFrom: "From $240 / m²", image: IMG.retain },
-    { name: "Alumawall", priceFrom: "From $290 / m²", image: IMG.services },
-  ],
-  "gates-automation": [
-    { name: "Swing Gates", priceFrom: "From $850", image: IMG.gates },
-    { name: "Sliding Gates", priceFrom: "From $1,450", image: IMG.gates },
-    { name: "Automation", priceFrom: "From $1,450", image: IMG.const },
-  ],
-  "security-fencing": [
-    { name: "Garrison", priceFrom: "From $135 / m", image: IMG.about },
-    { name: "Chainmesh", priceFrom: "From $65 / m", image: IMG.services },
-    { name: "Enclosures", priceFrom: "From $180 / m", image: IMG.whyUs },
-  ],
+const DEFAULT_INCLUDES = [
+  "Free on-site measure & fixed written quote",
+  "Posts cemented in-ground, string-lined",
+  "Quality materials rated for the WA climate",
+  "Full site cleanup on completion",
+  "10-yr workmanship warranty",
+];
+const DEFAULT_ADDONS = [
+  "Old fence removal & tip fees",
+  "Matching single & double gates",
+  "Plinths for retained or sloping blocks",
+];
+const genFaqs = (label: string) => [
+  { question: `How much does ${label.toLowerCase()} cost in Perth?`, answer: "Your written quote is fixed — the price depends on run length, height and site access, and we confirm it after a free on-site measure." },
+  { question: "Who pays for a boundary fence in WA?", answer: "Under the Dividing Fences Act, adjoining owners usually share the cost of a sufficient dividing fence equally. We supply a quote you can hand to your neighbour." },
+  { question: "How long does installation take?", answer: "Most standard residential jobs are installed in one to two days on site, usually within one to two weeks of accepting the quote." },
+];
+
+/** Build a full range-item (child) service from shared defaults + overrides. */
+type ChildInput = {
+  parentSlug: string;
+  slug: string;
+  title: string;
+  priceFrom: string;
+  priceValue: string;
+  image: string;
+  excerpt: string;
+  intro: string;
+  projectCategory: string;
+  priceUnit?: string;
+  stats?: { value: string; label: string }[];
+  coloursTitle?: string;
+  coloursNote?: string;
+  colours?: { name: string; hex: string }[];
+  heightsTitle?: string;
+  heights?: { label: string; priceLabel: string; popular: boolean }[];
+  includes?: string[];
+  addons?: string[];
 };
+const mkChild = (o: ChildInput) => ({
+  parentSlug: o.parentSlug,
+  slug: o.slug,
+  title: o.title,
+  priceFrom: o.priceFrom,
+  priceValue: o.priceValue,
+  priceUnit: o.priceUnit ?? "Supplied & installed",
+  image: o.image,
+  excerpt: o.excerpt,
+  intro: o.intro,
+  badges: BADGES,
+  stats: o.stats ?? [
+    { value: "10 yr", label: "Workmanship warranty" },
+    { value: "1–2 days", label: "Typical install" },
+    { value: "5.0", label: "300+ Google reviews" },
+    { value: "Fixed", label: "Written quote" },
+  ],
+  coloursTitle: o.coloursTitle ?? "",
+  coloursNote: o.coloursNote ?? (o.colours ? "Powder-coat colours in stock at Balcatta" : ""),
+  colours: o.colours ?? [],
+  heightsTitle: o.heightsTitle ?? "",
+  heights: o.heights ?? [],
+  includes: o.includes ?? DEFAULT_INCLUDES,
+  addons: o.addons ?? DEFAULT_ADDONS,
+  complianceTitle: COMPLIANCE_TITLE,
+  compliance: COMPLIANCE,
+  process: PROCESS,
+  projectCategory: o.projectCategory,
+  faqs: genFaqs(o.title),
+  areas: AREAS,
+});
+
+/* Range items (children). Each is a full, standalone service detail page;
+   its parent shows a range grid linking to these. */
+const childServices = [
+  // Pool Fencing range
+  mkChild({
+    parentSlug: "pool-fencing", slug: "frameless-glass-pool", title: "Frameless Glass Pool Fencing",
+    priceFrom: "from $350 / m", priceValue: "$350", image: IMG.whyUs,
+    excerpt: "Frameless toughened glass — an uninterrupted view of the pool, certified to AS 1926.1.",
+    intro: "Frameless glass pool fencing gives you the clearest possible view of the water with no top rail and minimal spigots — supplied and installed to AS 1926.1.",
+    projectCategory: "Pool",
+    stats: [
+      { value: "AS 1926.1", label: "Certified compliant" },
+      { value: "1–2 days", label: "Typical install" },
+      { value: "5.0", label: "300+ Google reviews" },
+      { value: "$0", label: "Measure & written quote" },
+    ],
+    coloursTitle: "Frame & hardware finishes",
+    coloursNote: "Spigot & hardware finishes to match your look",
+    colours: [
+      { name: "Brushed Stainless", hex: "#c7c9c9" }, { name: "Satin Stainless", hex: "#b4b6b6" },
+      { name: "Matte Black", hex: "#2b2b2b" }, { name: "Black", hex: "#1c1c1c" },
+      { name: "Monument", hex: "#323233" }, { name: "Woodland Grey", hex: "#4b4f4c" },
+      { name: "Surfmist", hex: "#e4e2d5" }, { name: "White", hex: "#f2f0e9" }, { name: "Dune", hex: "#cbc4b1" },
+    ],
+    heightsTitle: "Styles & pricing",
+    heights: [
+      { label: "Semi-frameless (budget)", priceLabel: "from $240 / m", popular: false },
+      { label: "Channel-fixed frameless", priceLabel: "from $340 / m", popular: false },
+      { label: "Spigot-fixed frameless", priceLabel: "from $390 / m", popular: true },
+      { label: "Frameless glass gates", priceLabel: "from $590 / gate", popular: false },
+    ],
+    includes: ["Free on-site measure & fixed written quote", "Toughened glass panels to AS 1926.1", "Marine-grade spigots & hardware", "Self-closing, self-latching gate", "Compliance-ready on handover"],
+    addons: ["Compliance inspection & certificate", "Mitred glass corners", "Gate soft-close upgrade"],
+  }),
+  mkChild({ parentSlug: "pool-fencing", slug: "tubular-aluminium-pool", title: "Tubular Aluminium Pool Fencing", priceFrom: "from $185 / m", priceValue: "$185", image: IMG.services, excerpt: "Powder-coated tubular aluminium — the budget-friendly compliant option.", intro: "Tubular aluminium pool fencing is the cost-effective way to meet WA pool safety laws, powder-coated to last in coastal conditions.", projectCategory: "Pool", colours: [ { name: "Black", hex: "#2b2b2b" }, { name: "Monument", hex: "#323233" }, { name: "White", hex: "#f2f0e9" } ] }),
+  mkChild({ parentSlug: "pool-fencing", slug: "perf-pool", title: "Perf Pool Fencing", priceFrom: "from $210 / m", priceValue: "$210", image: IMG.shop(5), excerpt: "Perforated aluminium panels — privacy and airflow with a modern look.", intro: "Perforated pool panels balance privacy and airflow while staying pool-safety compliant.", projectCategory: "Pool" }),
+  mkChild({ parentSlug: "pool-fencing", slug: "frameless-batten-pool", title: "Frameless Batten Pool Fencing", priceFrom: "from $340 / m", priceValue: "$340", image: IMG.about, excerpt: "Vertical batten screens with a frameless finish.", intro: "Frameless batten fencing gives a designer look around the pool with vertical battens and concealed fixings.", projectCategory: "Pool" }),
+  mkChild({ parentSlug: "pool-fencing", slug: "round-batten-pool", title: "Round Batten Pool Fencing", priceFrom: "from $260 / m", priceValue: "$260", image: IMG.project, excerpt: "Rounded aluminium battens, soft on the eye and easy to maintain.", intro: "Round batten pool fencing softens the look of the barrier while staying fully compliant.", projectCategory: "Pool" }),
+  mkChild({ parentSlug: "pool-fencing", slug: "barr-pool", title: "Barr Pool Fencing", priceFrom: "from $185 / m", priceValue: "$185", image: IMG.colorbond, excerpt: "Classic flat-top barrier fencing, compliant and hard-wearing.", intro: "Barr pool fencing is a straightforward, durable compliant barrier for pools and spas.", projectCategory: "Pool" }),
+
+  // Aluminium Slat range
+  mkChild({ parentSlug: "slat-fencing", slug: "horizontal-slat", title: "Horizontal Slat Fencing", priceFrom: "from $185 / m", priceValue: "$185", image: IMG.services, excerpt: "Horizontal aluminium blades — the classic modern slat look.", intro: "Horizontal slat fencing is the go-to for a clean, contemporary boundary with airflow.", projectCategory: "Slat", colours: [ { name: "Monument", hex: "#323233" }, { name: "Black", hex: "#2b2b2b" }, { name: "Woodland Grey", hex: "#4b4f4c" }, { name: "Timber-look", hex: "#8a5a33" } ] }),
+  mkChild({ parentSlug: "slat-fencing", slug: "vertical-slat", title: "Vertical Slat Fencing", priceFrom: "from $195 / m", priceValue: "$195", image: IMG.about, excerpt: "Vertical blades for a tall, screening-focused finish.", intro: "Vertical slat fencing draws the eye upward and gives excellent screening for front boundaries.", projectCategory: "Slat" }),
+  mkChild({ parentSlug: "slat-fencing", slug: "blade-slat", title: "Blade Slat Fencing", priceFrom: "from $220 / m", priceValue: "$220", image: IMG.whyUs, excerpt: "Wide-blade slats for a premium architectural statement.", intro: "Blade slat fencing uses wider blades for a bold, architectural boundary.", projectCategory: "Slat" }),
+
+  // Retaining Walls range
+  mkChild({
+    parentSlug: "retaining-walls", slug: "fibrewall-retaining", title: "Fibrewall Retaining",
+    priceFrom: "from $18.50 / lm", priceValue: "$18.50", priceUnit: "per lm supplied", image: IMG.retain,
+    excerpt: "Fibre-reinforced concrete sleepers — quick to install, and they never rot or rust.",
+    intro: "Fibrewall retaining uses fibre-reinforced concrete sleepers between galvanised posts — a fast, durable, rot-proof wall you can DIY or have us install.",
+    projectCategory: "Retaining",
+    stats: [
+      { value: "Rot-proof", label: "Never rots or rusts" },
+      { value: "DIY-ready", label: "Or installed by us" },
+      { value: "5.0", label: "300+ Google reviews" },
+      { value: "$0", label: "Measure & written quote" },
+    ],
+    coloursTitle: "Sleeper finishes",
+    coloursNote: "Smooth & woodgrain Fibrewall sleepers — colours to match your fence",
+    colours: [
+      { name: "Smooth Grey", hex: "#9a9a95" }, { name: "Charcoal", hex: "#3a3a3a" },
+      { name: "Limestone", hex: "#d8d2c2" }, { name: "Woodgrain", hex: "#8a5a33" },
+      { name: "Sandstone", hex: "#cfc3a6" }, { name: "Monument", hex: "#323233" },
+      { name: "Basalt", hex: "#6d6c6e" }, { name: "Dune", hex: "#cbc4b1" }, { name: "Black", hex: "#1c1c1c" },
+    ],
+    heightsTitle: "Sleeper sizes & pricing",
+    heights: [
+      { label: "Sleeper 2380mm", priceLabel: "from $18.50 / lm", popular: false },
+      { label: "Sleeper 3050mm", priceLabel: "from $22 / lm", popular: true },
+      { label: "Under-fence plinth", priceLabel: "from $22 / lm", popular: false },
+      { label: "Supply + install", priceLabel: "priced at on-site quote", popular: false },
+    ],
+    includes: ["Free on-site measure & fixed written quote", "Galvanised H-posts set in concrete", "Fibre-reinforced sleepers, rot & rust proof", "Ag-drain and backfill where needed", "Full site cleanup on completion"],
+    addons: ["Structural engineering & council submission", "Extra drainage for wet blocks", "Fence installed on top"],
+  }),
+  mkChild({ parentSlug: "retaining-walls", slug: "alumawall-retaining", title: "Alumawall Retaining", priceFrom: "from $290 / m²", priceValue: "$290", priceUnit: "per m² installed", image: IMG.services, excerpt: "Powder-coated aluminium retaining — lightweight and corrosion-proof.", intro: "Alumawall retaining is a lightweight, corrosion-proof aluminium system ideal for coastal blocks.", projectCategory: "Retaining" }),
+
+  // Gates & Automation range
+  mkChild({ parentSlug: "gates-automation", slug: "swing-gates", title: "Swing Gates", priceFrom: "from $850", priceValue: "$850", image: IMG.gates, excerpt: "Custom swing gates matched to your fence, single or double leaf.", intro: "Swing gates suit shorter driveways with clearance — fabricated to match your fence and hung to last.", projectCategory: "Gates", colours: [ { name: "Monument", hex: "#323233" }, { name: "Black", hex: "#2b2b2b" }, { name: "Woodland Grey", hex: "#4b4f4c" } ] }),
+  mkChild({ parentSlug: "gates-automation", slug: "sliding-gates", title: "Sliding Gates", priceFrom: "from $1,450", priceValue: "$1,450", image: IMG.gates, excerpt: "Track or cantilever sliding gates for wide, flat driveways.", intro: "Sliding gates are ideal for flat, wide driveways where a swing gate won't clear — with motor sizing to match.", projectCategory: "Gates" }),
+  mkChild({ parentSlug: "gates-automation", slug: "gate-automation", title: "Gate Automation", priceFrom: "from $1,450", priceValue: "$1,450", image: IMG.const, excerpt: "Motors, keypads, remotes and solar — fitted and commissioned.", intro: "Gate automation adds a motor, keypad and remotes to a new or existing gate, wired and commissioned properly.", projectCategory: "Gates" }),
+
+  // Security Fencing range
+  mkChild({ parentSlug: "security-fencing", slug: "garrison-fencing", title: "Garrison Fencing", priceFrom: "from $135 / m", priceValue: "$135", image: IMG.about, excerpt: "Steel spear-top garrison fencing — commercial-grade security.", intro: "Garrison fencing is a tough steel spear-top barrier for yards, sites and public infrastructure.", projectCategory: "Security", colours: [ { name: "Black", hex: "#2b2b2b" }, { name: "Monument", hex: "#323233" }, { name: "Galvanised", hex: "#9a9a95" } ] }),
+  mkChild({ parentSlug: "security-fencing", slug: "chainmesh-fencing", title: "Chainmesh Fencing", priceFrom: "from $65 / m", priceValue: "$65", image: IMG.services, excerpt: "Galvanised or PVC-coated chainmesh for sites and yards.", intro: "Chainmesh is the economical perimeter option for sites, yards and infrastructure.", projectCategory: "Security" }),
+  mkChild({ parentSlug: "security-fencing", slug: "enclosures", title: "Enclosures", priceFrom: "from $180 / m", priceValue: "$180", image: IMG.whyUs, excerpt: "Secure enclosures for plant, pumps and equipment.", intro: "Custom enclosures keep plant, pumps and equipment secure and to spec.", projectCategory: "Security" }),
+
+  // Blade Fencing range (new parent below)
+  mkChild({ parentSlug: "blade-fencing", slug: "radiator-blade", title: "Radiator Blade Fencing", priceFrom: "from $340 / m", priceValue: "$340", image: IMG.services, excerpt: "Fine radiator-profile blades for a premium screen.", intro: "Radiator blade fencing uses fine, closely-spaced blades for a premium, contemporary screen.", projectCategory: "Slat", colours: [ { name: "Monument", hex: "#323233" }, { name: "Black", hex: "#2b2b2b" }, { name: "Surfmist", hex: "#e4e2d5" } ] }),
+  mkChild({ parentSlug: "blade-fencing", slug: "frameless-blade", title: "Frameless Blade Fencing", priceFrom: "from $380 / m", priceValue: "$380", image: IMG.about, excerpt: "Frameless blade panels with concealed fixings.", intro: "Frameless blade fencing hides all fixings for the cleanest possible blade screen.", projectCategory: "Slat" }),
+];
 
 const services = [
   {
@@ -325,13 +457,29 @@ const services = [
       { question: "Will termites be a problem?", answer: "We use treated timber rated for in-ground contact, which resists termites and rot." },
     ],
   },
+  {
+    slug: "blade-fencing", title: "Blade Fencing Range", priceFrom: "from $340 / m", image: IMG.services,
+    excerpt: "Architectural blade screens — fine radiator profiles to bold frameless blades.",
+    intro: "Our blade fencing range covers everything from fine radiator-profile screens to bold frameless blades, powder-coated for the WA climate.",
+    priceValue: "$340", priceUnit: "Supplied & installed", badges: BADGES,
+    stats: [
+      { value: "15 yr", label: "Powder-coat warranty" }, { value: "2–3 days", label: "Typical install" },
+      { value: "5.0", label: "300+ Google reviews" }, { value: "40+", label: "Colour options" },
+    ],
+    includes: DEFAULT_INCLUDES,
+    addons: DEFAULT_ADDONS,
+    projectCategory: "Slat",
+    faqs: [
+      { question: "What's the difference between the blade options?", answer: "Radiator blades are fine and closely spaced; frameless blades hide all fixings. Both are powder-coated aluminium." },
+    ],
+  },
 ].map((s) => ({
   ...s,
   areas: AREAS,
   complianceTitle: COMPLIANCE_TITLE,
   compliance: COMPLIANCE,
   process: PROCESS,
-  ranges: RANGES[s.slug] ?? [],
+  parentSlug: "",
   // Which Shop category the service's product-range grid pulls from.
   productCategory: ({
     "colorbond-fencing": "Color Bond Fencing",
@@ -535,8 +683,11 @@ async function main() {
 
   console.log();
 
-  await Service.insertMany(services.map((s, i) => ({ ...s, price: s.priceFrom, order: i, active: true })));
-  console.log(`  ${services.length} services`);
+  const allServices = [...services, ...childServices];
+  await Service.insertMany(
+    allServices.map((s, i) => ({ ...s, price: s.priceFrom, order: i, active: true })),
+  );
+  console.log(`  ${services.length} services + ${childServices.length} range items`);
 
   const SUBCAT: Record<string, string> = {
     "aluminium-slat-65": "Slat panels",

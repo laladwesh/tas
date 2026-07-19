@@ -206,7 +206,7 @@ export default async function ServiceDetailPage({ params }: Params) {
           <Container>
             <div className="mb-[16px] flex flex-wrap items-end justify-between gap-2">
               <h2 className="text-xl font-medium text-black sm:text-2xl">
-                Pick your colour
+                {service.coloursTitle || "Pick your colour"}
               </h2>
               {service.coloursNote && (
                 <p className="text-xs text-black/50">{service.coloursNote}</p>
@@ -237,7 +237,7 @@ export default async function ServiceDetailPage({ params }: Params) {
         <section className="w-full bg-white pt-[48px]">
           <Container>
             <h2 className="mb-[16px] text-xl font-medium text-black sm:text-2xl">
-              Heights &amp; pricing
+              {service.heightsTitle || "Heights & pricing"}
             </h2>
             <div className="grid grid-cols-2 gap-[12px] md:grid-cols-4">
               {service.heights.map((height) => (
@@ -334,7 +334,7 @@ export default async function ServiceDetailPage({ params }: Params) {
               {service.includes.length > 0 && (
                 <div className="rounded-[8px] bg-field p-[24px]">
                   <h3 className="mb-[16px] text-lg font-medium text-black">
-                    Every install includes
+                    {service.includesTitle || "Every install includes"}
                   </h3>
                   <ul className="flex flex-col gap-[12px]">
                     {service.includes.map((item) => (
@@ -351,7 +351,7 @@ export default async function ServiceDetailPage({ params }: Params) {
               {service.addons.length > 0 && (
                 <div className="rounded-[8px] border border-cool-20 p-[24px]">
                   <h3 className="mb-[16px] text-lg font-medium text-black">
-                    Popular add-ons
+                    {service.addonsTitle || "Popular add-ons"}
                   </h3>
                   <ul className="flex flex-col gap-[12px]">
                     {service.addons.map((item) => (
@@ -398,7 +398,7 @@ export default async function ServiceDetailPage({ params }: Params) {
         <section className="w-full bg-white pt-[48px]">
           <Container>
             <h2 className="mb-[20px] text-xl font-medium text-black sm:text-2xl">
-              From first call to last panel
+              {service.processTitle || "From first call to last panel"}
             </h2>
             <div className="grid gap-[24px] sm:grid-cols-2 lg:grid-cols-4">
               {service.process.map((step, i) => (
@@ -464,7 +464,7 @@ export default async function ServiceDetailPage({ params }: Params) {
         <section className="w-full bg-white pt-[48px]">
           <Container>
             <h2 className="mb-[16px] text-xl font-medium text-black sm:text-2xl">
-              What Perth homeowners say
+              {service.reviewsTitle || "What Perth homeowners say"}
             </h2>
             <div className="grid gap-[16px] sm:grid-cols-3">
               {reviews.slice(0, 3).map((review) => (

@@ -9,7 +9,6 @@ import {
   servicesFaqs,
   reviewsCatalog,
   type ServiceItem,
-  type ServiceRange,
   type ProductItem,
   type ArticleItem,
   type ProjectItem,
@@ -24,7 +23,7 @@ import {
    to the real backend is a seeding job — no component changes.
    =========================================================================== */
 
-export type { ServiceItem, ServiceRange, ProductItem, ArticleItem, ProjectItem, ReviewItem };
+export type { ServiceItem, ProductItem, ArticleItem, ProjectItem, ReviewItem };
 
 export type FaqItem = {
   question: string;
@@ -48,16 +47,24 @@ export async function getServiceCatalog(): Promise<ServiceItem[]> {
       priceFrom: d.priceFrom || d.price || "",
       image: d.image,
       excerpt: d.excerpt ?? "",
-      ranges: (d.ranges ?? []).map((r) => ({
-        name: r.name ?? "",
-        priceFrom: r.priceFrom ?? "",
-        image: r.image ?? "",
-      })),
+      parentSlug: d.parentSlug ?? "",
     }));
   } catch (error) {
     console.error("[catalog] getServiceCatalog fell back to static:", error);
     return servicesCatalog;
   }
+}
+
+/** Top-level services (shown on /services) — those without a parent. */
+export async function getTopLevelServices(): Promise<ServiceItem[]> {
+  const all = await getServiceCatalog();
+  return all.filter((s) => !s.parentSlug);
+}
+
+/** Range items (children) of a given parent service. */
+export async function getServiceChildren(parentSlug: string): Promise<ServiceItem[]> {
+  const all = await getServiceCatalog();
+  return all.filter((s) => s.parentSlug === parentSlug);
 }
 
 export async function getServiceBySlug(slug: string): Promise<ServiceItem | null> {
@@ -80,14 +87,20 @@ export type ServiceDetail = ServiceItem & {
   priceUnit: string;
   badges: string[];
   stats: ServiceStat[];
+  coloursTitle: string;
   coloursNote: string;
   colours: ServiceSwatch[];
+  heightsTitle: string;
   heights: ServiceHeight[];
+  includesTitle: string;
   includes: string[];
+  addonsTitle: string;
   addons: string[];
   complianceTitle: string;
   compliance: string[];
+  processTitle: string;
   process: ServiceStep[];
+  reviewsTitle: string;
   projectCategory: string;
   productCategory: string;
   faqs: ServiceFaq[];
@@ -106,29 +119,31 @@ export async function getServiceDetail(slug: string): Promise<ServiceDetail | nu
       priceFrom: d.priceFrom || d.price || "",
       image: d.image,
       excerpt: d.excerpt ?? "",
-      ranges: (d.ranges ?? []).map((r) => ({
-        name: r.name ?? "",
-        priceFrom: r.priceFrom ?? "",
-        image: r.image ?? "",
-      })),
+      parentSlug: d.parentSlug ?? "",
       body: d.body ?? "",
       intro: d.intro ?? "",
       priceValue: d.priceValue ?? "",
       priceUnit: d.priceUnit ?? "",
       badges: d.badges ?? [],
       stats: (d.stats ?? []).map((s) => ({ value: s.value ?? "", label: s.label ?? "" })),
+      coloursTitle: d.coloursTitle ?? "",
       coloursNote: d.coloursNote ?? "",
       colours: (d.colours ?? []).map((c) => ({ name: c.name ?? "", hex: c.hex ?? "#cccccc" })),
+      heightsTitle: d.heightsTitle ?? "",
       heights: (d.heights ?? []).map((h) => ({
         label: h.label ?? "",
         priceLabel: h.priceLabel ?? "",
         popular: Boolean(h.popular),
       })),
+      includesTitle: d.includesTitle ?? "",
       includes: d.includes ?? [],
+      addonsTitle: d.addonsTitle ?? "",
       addons: d.addons ?? [],
       complianceTitle: d.complianceTitle ?? "",
       compliance: d.compliance ?? [],
+      processTitle: d.processTitle ?? "",
       process: (d.process ?? []).map((p) => ({ title: p.title ?? "", body: p.body ?? "" })),
+      reviewsTitle: d.reviewsTitle ?? "",
       projectCategory: d.projectCategory ?? "",
       productCategory: d.productCategory ?? "",
       faqs: (d.faqs ?? []).map((f) => ({ question: f.question ?? "", answer: f.answer ?? "" })),

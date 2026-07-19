@@ -38,10 +38,12 @@ export const serviceSchema = z.object({
   stats: z
     .array(z.object({ value: z.string().default(""), label: z.string().default("") }))
     .default([]),
+  coloursTitle: z.string().trim().default(""),
   coloursNote: z.string().trim().default(""),
   colours: z
     .array(z.object({ name: z.string().default(""), hex: z.string().default("#cccccc") }))
     .default([]),
+  heightsTitle: z.string().trim().default(""),
   heights: z
     .array(
       z.object({
@@ -51,24 +53,20 @@ export const serviceSchema = z.object({
       }),
     )
     .default([]),
+  includesTitle: z.string().trim().default(""),
   includes: z.array(z.string()).default([]),
+  addonsTitle: z.string().trim().default(""),
   addons: z.array(z.string()).default([]),
   complianceTitle: z.string().trim().default(""),
   compliance: z.array(z.string()).default([]),
+  processTitle: z.string().trim().default(""),
   process: z
     .array(z.object({ title: z.string().default(""), body: z.string().default("") }))
     .default([]),
+  reviewsTitle: z.string().trim().default(""),
   projectCategory: z.string().trim().default(""),
   productCategory: z.string().trim().default(""),
-  ranges: z
-    .array(
-      z.object({
-        name: z.string().default(""),
-        priceFrom: z.string().default(""),
-        image: z.string().default(""),
-      }),
-    )
-    .default([]),
+  parentSlug: z.string().trim().toLowerCase().default(""),
   faqs: z
     .array(z.object({ question: z.string().default(""), answer: z.string().default("") }))
     .default([]),

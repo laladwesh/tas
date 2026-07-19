@@ -87,26 +87,32 @@ function serviceFields(fd: FormData) {
     priceUnit: str(fd, "priceUnit"),
     badges: lines(fd, "badges"),
     stats: rows(fd, "stats", ["value", "label"]),
+    coloursTitle: str(fd, "coloursTitle"),
     coloursNote: str(fd, "coloursNote"),
     colours: rows(fd, "colours", ["name", "hex"]).map((c) => ({
       name: c.name,
       hex: c.hex || "#cccccc",
     })),
+    heightsTitle: str(fd, "heightsTitle"),
     heights: rows(fd, "heights", ["label", "priceLabel", "popular"]).map((h) => ({
       label: h.label,
       priceLabel: h.priceLabel,
       popular: /^(y|yes|true|1|popular)$/i.test(h.popular),
     })),
+    includesTitle: str(fd, "includesTitle"),
     includes: lines(fd, "includes"),
+    addonsTitle: str(fd, "addonsTitle"),
     addons: lines(fd, "addons"),
     complianceTitle: str(fd, "complianceTitle"),
     compliance: lines(fd, "compliance"),
+    processTitle: str(fd, "processTitle"),
     process: rows(fd, "process", ["title", "body"]),
+    reviewsTitle: str(fd, "reviewsTitle"),
     projectCategory: str(fd, "projectCategory"),
     productCategory: str(fd, "productCategory"),
     faqs: rows(fd, "faqs", ["question", "answer"]),
     areas: lines(fd, "areas"),
-    ranges: rows(fd, "ranges", ["name", "priceFrom", "image"]),
+    parentSlug: str(fd, "parentSlug"),
   };
 }
 

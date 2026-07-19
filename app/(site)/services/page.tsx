@@ -19,11 +19,16 @@ export const metadata: Metadata = {
 };
 
 export default async function ServicesPage() {
-  const [services, faqs, settings] = await Promise.all([
+  const [all, faqs, settings] = await Promise.all([
     getServiceCatalog(),
     getFaqsForPage("services"),
     getSettings(),
   ]);
+
+  // Show only top-level services; a service that is a parent of others opens
+  // its range grid, everything else goes straight to its detail page.
+  const parentSlugs = new Set(all.map((s) => s.parentSlug).filter(Boolean));
+  const services = all.filter((s) => !s.parentSlug);
 
   return (
     <>
@@ -42,7 +47,7 @@ export default async function ServicesPage() {
               <Link
                 key={service.slug}
                 href={
-                  service.ranges.length > 0
+                  parentSlugs.has(service.slug)
                     ? `/services/${service.slug}/range`
                     : `/services/${service.slug}`
                 }

@@ -110,19 +110,25 @@ export type AdminService = {
   priceUnit: string;
   badges: string;
   stats: string;
+  coloursTitle: string;
   coloursNote: string;
   colours: string;
+  heightsTitle: string;
   heights: string;
+  includesTitle: string;
   includes: string;
+  addonsTitle: string;
   addons: string;
   complianceTitle: string;
   compliance: string;
+  processTitle: string;
   process: string;
+  reviewsTitle: string;
   projectCategory: string;
   productCategory: string;
   faqs: string;
   areas: string;
-  ranges: string;
+  parentSlug: string;
 };
 
 /** Serialise the stored arrays back into the "one item / pipe-separated" text
@@ -174,19 +180,25 @@ export async function listAllServices(): Promise<AdminService[]> {
     priceUnit: d.priceUnit ?? "",
     badges: joinLines(d.badges),
     stats: joinRows(d.stats, ["value", "label"]),
+    coloursTitle: d.coloursTitle ?? "",
     coloursNote: d.coloursNote ?? "",
     colours: joinRows(d.colours, ["name", "hex"]),
+    heightsTitle: d.heightsTitle ?? "",
     heights: joinRows(d.heights, ["label", "priceLabel", "popular"]),
+    includesTitle: d.includesTitle ?? "",
     includes: joinLines(d.includes),
+    addonsTitle: d.addonsTitle ?? "",
     addons: joinLines(d.addons),
     complianceTitle: d.complianceTitle ?? "",
     compliance: joinLines(d.compliance),
+    processTitle: d.processTitle ?? "",
     process: joinRows(d.process, ["title", "body"]),
+    reviewsTitle: d.reviewsTitle ?? "",
     projectCategory: d.projectCategory ?? "",
     productCategory: d.productCategory ?? "",
     faqs: joinRows(d.faqs, ["question", "answer"]),
     areas: joinLines(d.areas),
-    ranges: joinRows(d.ranges, ["name", "priceFrom", "image"]),
+    parentSlug: d.parentSlug ?? "",
   }));
 }
 
