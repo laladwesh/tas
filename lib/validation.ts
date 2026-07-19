@@ -50,6 +50,7 @@ export const serviceSchema = z.object({
         label: z.string().default(""),
         priceLabel: z.string().default(""),
         popular: z.boolean().default(false),
+        visual: z.string().default("solid"),
       }),
     )
     .default([]),

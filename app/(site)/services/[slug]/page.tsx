@@ -26,6 +26,48 @@ import { siteConfig } from "@/lib/seo";
 
 export const revalidate = 60;
 
+/**
+ * Pricing-tile illustration (TileVisual). Draws the right motif per product:
+ * solid bars (Colorbond), gapped bars (batten/tubular), glass panels,
+ * radiator blades (fine bars), or horizontal sleeper courses.
+ */
+function TileBars({ visual, popular }: { visual: string; popular: boolean }) {
+  const bar = popular ? "bg-white/70" : "bg-black/20";
+
+  if (visual === "sleeper") {
+    return (
+      <div className="flex h-[40px] w-full flex-col justify-center gap-[5px]">
+        {Array.from({ length: 4 }).map((_, i) => (
+          <span key={i} className={`h-[6px] w-full rounded-[1px] ${bar}`} />
+        ))}
+      </div>
+    );
+  }
+  if (visual === "glass") {
+    return (
+      <div className="flex h-[40px] w-full items-stretch gap-[4px]">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <span
+            key={i}
+            className={`flex-1 rounded-[2px] border ${
+              popular ? "border-white/50 bg-white/10" : "border-black/15 bg-black/5"
+            }`}
+          />
+        ))}
+      </div>
+    );
+  }
+  const count = visual === "radiator" ? 16 : visual === "gapped" ? 6 : 9;
+  const gap = visual === "gapped" ? "gap-[6px]" : visual === "radiator" ? "gap-[2px]" : "gap-[3px]";
+  return (
+    <div className={`flex h-[40px] w-full items-stretch ${gap}`}>
+      {Array.from({ length: count }).map((_, i) => (
+        <span key={i} className={`flex-1 rounded-[1px] ${bar}`} />
+      ))}
+    </div>
+  );
+}
+
 type Params = { params: Promise<{ slug: string }> };
 
 /** Pre-render every service page at build time (great for SEO + speed). */
@@ -256,17 +298,7 @@ export default async function ServiceDetailPage({ params }: Params) {
                         Most popular
                       </span>
                     )}
-                    {/* Fence-panel bars motif */}
-                    <div className="flex h-[40px] items-stretch gap-[3px]">
-                      {Array.from({ length: 9 }).map((_, i) => (
-                        <span
-                          key={i}
-                          className={`flex-1 rounded-[1px] ${
-                            popular ? "bg-white/70" : "bg-black/20"
-                          }`}
-                        />
-                      ))}
-                    </div>
+                    <TileBars visual={height.visual} popular={popular} />
                     <span className="text-lg font-semibold">{height.label}</span>
                     <span className={`text-sm ${popular ? "text-white/70" : "text-black/60"}`}>
                       {height.priceLabel}

@@ -76,7 +76,13 @@ export async function getServiceBySlug(slug: string): Promise<ServiceItem | null
    the page hides any section whose array is empty. */
 export type ServiceStat = { value: string; label: string };
 export type ServiceSwatch = { name: string; hex: string };
-export type ServiceHeight = { label: string; priceLabel: string; popular: boolean };
+export type TileVisual = "solid" | "gapped" | "glass" | "radiator" | "sleeper";
+export type ServiceHeight = {
+  label: string;
+  priceLabel: string;
+  popular: boolean;
+  visual: TileVisual;
+};
 export type ServiceStep = { title: string; body: string };
 export type ServiceFaq = { question: string; answer: string };
 
@@ -134,6 +140,7 @@ export async function getServiceDetail(slug: string): Promise<ServiceDetail | nu
         label: h.label ?? "",
         priceLabel: h.priceLabel ?? "",
         popular: Boolean(h.popular),
+        visual: (h.visual as TileVisual) || "solid",
       })),
       includesTitle: d.includesTitle ?? "",
       includes: d.includes ?? [],

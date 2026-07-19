@@ -76,6 +76,9 @@ const svcHeightSchema = new Schema(
     label: { type: String, default: "" }, // e.g. "1800mm"
     priceLabel: { type: String, default: "" }, // e.g. "from $104 / lm"
     popular: { type: Boolean, default: false }, // shows the "Most popular" tag
+    /** Which illustration to draw in the tile (TileVisual):
+     *  solid | gapped | glass | radiator | sleeper. Defaults to solid. */
+    visual: { type: String, default: "solid" },
   },
   { _id: false },
 );

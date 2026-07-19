@@ -184,7 +184,7 @@ export async function listAllServices(): Promise<AdminService[]> {
     coloursNote: d.coloursNote ?? "",
     colours: joinRows(d.colours, ["name", "hex"]),
     heightsTitle: d.heightsTitle ?? "",
-    heights: joinRows(d.heights, ["label", "priceLabel", "popular"]),
+    heights: joinRows(d.heights, ["label", "priceLabel", "popular", "visual"]),
     includesTitle: d.includesTitle ?? "",
     includes: joinLines(d.includes),
     addonsTitle: d.addonsTitle ?? "",

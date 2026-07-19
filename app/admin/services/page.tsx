@@ -70,7 +70,7 @@ function RichServiceFields({ s = BLANK }: { s?: Partial<AdminService> }) {
           <input name="heightsTitle" defaultValue={s.heightsTitle} placeholder="Heights & pricing" className={inputClass} />
         </Field>
         <div className="sm:col-span-2">
-          <Field label="Sizes — one per line: label | price | popular?   (e.g. 1800mm | from $104 / lm | yes)">
+          <Field label="Sizes — one per line: label | price | popular? | visual   (visual = solid|gapped|glass|radiator|sleeper). e.g. 1800mm | from $104 / lm | yes | solid">
             <textarea name="heights" rows={4} defaultValue={s.heights} className={ta} />
           </Field>
         </div>

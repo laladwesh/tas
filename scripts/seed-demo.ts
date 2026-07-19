@@ -116,7 +116,7 @@ type ChildInput = {
   coloursNote?: string;
   colours?: { name: string; hex: string }[];
   heightsTitle?: string;
-  heights?: { label: string; priceLabel: string; popular: boolean }[];
+  heights?: { label: string; priceLabel: string; popular: boolean; visual?: string }[];
   includes?: string[];
   addons?: string[];
 };
@@ -178,10 +178,10 @@ const childServices = [
     ],
     heightsTitle: "Styles & pricing",
     heights: [
-      { label: "Semi-frameless (budget)", priceLabel: "from $240 / m", popular: false },
-      { label: "Channel-fixed frameless", priceLabel: "from $340 / m", popular: false },
-      { label: "Spigot-fixed frameless", priceLabel: "from $390 / m", popular: true },
-      { label: "Frameless glass gates", priceLabel: "from $590 / gate", popular: false },
+      { label: "Semi-frameless (budget)", priceLabel: "from $240 / m", popular: false, visual: "glass" },
+      { label: "Channel-fixed frameless", priceLabel: "from $340 / m", popular: false, visual: "glass" },
+      { label: "Spigot-fixed frameless", priceLabel: "from $390 / m", popular: true, visual: "glass" },
+      { label: "Frameless glass gates", priceLabel: "from $590 / gate", popular: false, visual: "glass" },
     ],
     includes: ["Free on-site measure & fixed written quote", "Toughened glass panels to AS 1926.1", "Marine-grade spigots & hardware", "Self-closing, self-latching gate", "Compliance-ready on handover"],
     addons: ["Compliance inspection & certificate", "Mitred glass corners", "Gate soft-close upgrade"],
@@ -220,10 +220,10 @@ const childServices = [
     ],
     heightsTitle: "Sleeper sizes & pricing",
     heights: [
-      { label: "Sleeper 2380mm", priceLabel: "from $18.50 / lm", popular: false },
-      { label: "Sleeper 3050mm", priceLabel: "from $22 / lm", popular: true },
-      { label: "Under-fence plinth", priceLabel: "from $22 / lm", popular: false },
-      { label: "Supply + install", priceLabel: "priced at on-site quote", popular: false },
+      { label: "Sleeper 2380mm", priceLabel: "from $18.50 / lm", popular: false, visual: "sleeper" },
+      { label: "Sleeper 3050mm", priceLabel: "from $22 / lm", popular: true, visual: "sleeper" },
+      { label: "Under-fence plinth", priceLabel: "from $22 / lm", popular: false, visual: "sleeper" },
+      { label: "Supply + install", priceLabel: "priced at on-site quote", popular: false, visual: "sleeper" },
     ],
     includes: ["Free on-site measure & fixed written quote", "Galvanised H-posts set in concrete", "Fibre-reinforced sleepers, rot & rust proof", "Ag-drain and backfill where needed", "Full site cleanup on completion"],
     addons: ["Structural engineering & council submission", "Extra drainage for wet blocks", "Fence installed on top"],
