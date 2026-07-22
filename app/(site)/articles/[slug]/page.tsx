@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import PageHero from "@/app/_components/site/PageHero";
 import { Container } from "@/app/_components/site/ui";
 import JsonLd from "@/components/JsonLd";
+import SafeImage from "@/components/SafeImage";
 import { getArticles, getArticleBySlug } from "@/server/services/catalog";
 import { getSettings } from "@/server/services/content";
 import { siteConfig } from "@/lib/seo";
@@ -152,10 +152,9 @@ export default async function ArticlePage({ params }: Params) {
                     className="group flex flex-col gap-2"
                   >
                     <div className="relative aspect-[296/166] w-full overflow-hidden rounded-[4px] bg-field">
-                      <Image
+                      <SafeImage
                         src={item.image}
                         alt=""
-                        fill
                         sizes="33vw"
                         className="object-cover transition-transform duration-300 group-hover:scale-105"
                       />

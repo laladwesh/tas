@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOutAction } from "@/app/login/signout-action";
 import { UserIcon } from "@/components/icons";
+import SafeImage from "@/components/SafeImage";
 
 type Me = { name: string; email: string; image: string; role: string } | null;
 
@@ -92,7 +92,7 @@ export default function AccountMenu() {
         className="flex size-[28px] items-center justify-center overflow-hidden rounded-full bg-ink text-[11px] font-semibold text-white"
       >
         {me.image ? (
-          <Image src={me.image} alt="" width={28} height={28} className="size-full object-cover" />
+          <SafeImage src={me.image} alt="" width={28} height={28} className="size-full object-cover" />
         ) : (
           initials || "U"
         )}

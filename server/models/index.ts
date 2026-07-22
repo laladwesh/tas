@@ -154,6 +154,11 @@ const serviceSchema = new Schema(
      *  A parent with children shows a range grid; each child is its own full
      *  detail page. Empty = a top-level service. */
     parentSlug: { type: String, default: "", index: true },
+    /** Only used on a PARENT with children: heading + intro paragraph shown
+     *  above the range grid (/services/<slug>/range). Falls back to a
+     *  generic "The {title} range" line when blank. */
+    rangeHeading: { type: String, default: "" },
+    rangeIntro: { type: String, default: "" },
   },
   { timestamps: true },
 );

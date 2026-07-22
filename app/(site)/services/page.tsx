@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 import PageHero from "@/app/_components/site/PageHero";
 import FaqAccordion from "@/app/_components/site/FaqAccordion";
 import { Container } from "@/app/_components/site/ui";
 import { ArrowUpRightIcon } from "@/components/icons";
+import SafeImage from "@/components/SafeImage";
 import { getServiceCatalog, getFaqsForPage } from "@/server/services/catalog";
 import { getSettings } from "@/server/services/content";
 
@@ -54,10 +54,9 @@ export default async function ServicesPage() {
                 className="group flex flex-col gap-[10px] transition-transform duration-300 ease-out hover:-translate-y-1 motion-reduce:transform-none"
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[6px] bg-gray-100">
-                  <Image
+                  <SafeImage
                     src={service.image}
                     alt={service.title}
-                    fill
                     sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />

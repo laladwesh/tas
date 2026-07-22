@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SearchBox from "./SearchOverlay";
 import AccountMenu from "./AccountMenu";
+import ServicesMenu from "./ServicesMenu";
 import {
   ArrowUpRightIcon,
   MailIcon,
@@ -100,26 +101,32 @@ export default function SiteHeader({
 
         {/* Links */}
         <ul className="hidden items-start justify-center gap-[16px] pb-[7px] pt-[12px] lg:flex">
-          {navLinks.map((link) => (
-            <li key={link.label}>
-              <Link
-                href={link.href}
-                className="group flex flex-col items-center justify-center gap-[2px]"
-              >
-                <span className="text-[14px] leading-none text-black">
-                  {link.label}
-                </span>
-                {/* Always rendered (no layout shift); shown when active OR hovered. */}
-                <span
-                  className={`h-[3px] w-[12px] rounded-[5px] bg-black transition-opacity duration-200 ${
-                    active === link.label
-                      ? "opacity-100"
-                      : "opacity-0 group-hover:opacity-100"
-                  }`}
-                />
-              </Link>
-            </li>
-          ))}
+          {navLinks.map((link) =>
+            link.label === "Services" ? (
+              <li key={link.label}>
+                <ServicesMenu active={active === "Services"} />
+              </li>
+            ) : (
+              <li key={link.label}>
+                <Link
+                  href={link.href}
+                  className="group flex flex-col items-center justify-center gap-[2px]"
+                >
+                  <span className="text-[14px] leading-none text-black">
+                    {link.label}
+                  </span>
+                  {/* Always rendered (no layout shift); shown when active OR hovered. */}
+                  <span
+                    className={`h-[3px] w-[12px] rounded-[5px] bg-black transition-opacity duration-200 ${
+                      active === link.label
+                        ? "opacity-100"
+                        : "opacity-0 group-hover:opacity-100"
+                    }`}
+                  />
+                </Link>
+              </li>
+            ),
+          )}
         </ul>
 
         {/* Actions */}

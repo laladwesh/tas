@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 import PageHero from "@/app/_components/site/PageHero";
 import { Container } from "@/app/_components/site/ui";
 import { ClockIcon } from "@/components/icons";
+import SafeImage from "@/components/SafeImage";
 import { getArticles } from "@/server/services/catalog";
 import { getSettings } from "@/server/services/content";
 
@@ -48,10 +48,9 @@ export default async function ArticlesPage() {
                 className="group flex flex-col gap-[6px] rounded-[12px] pb-3 drop-shadow-[4px_4px_16px_rgba(0,0,0,0.08)] transition-transform duration-300 ease-out hover:-translate-y-1 motion-reduce:transform-none"
               >
                 <div className="relative aspect-[296/166] w-full overflow-hidden rounded-[4px] bg-field">
-                  <Image
+                  <SafeImage
                     src={article.image}
                     alt=""
-                    fill
                     sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />

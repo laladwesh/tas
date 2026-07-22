@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import { Container, SectionHeading } from "@/app/_components/site/ui";
 import { ChevronLeft, ChevronRight } from "@/components/icons";
+import SafeImage from "@/components/SafeImage";
 import type { ProjectItem } from "@/server/services/catalog";
 
 /** Bottom gradient from the Figma frame. */
@@ -54,10 +54,9 @@ export default function RecentProjects({ projects }: { projects: ProjectItem[] }
             {/* Big image */}
             <div className="w-full rounded-[12px] pb-[12px] drop-shadow-[4px_4px_16px_rgba(0,0,0,0.1)]">
               <div className="relative aspect-[928/522] w-full overflow-hidden rounded-[4px] bg-black">
-                <Image
+                <SafeImage
                   src={current.image}
                   alt={current.title || `${current.category} fencing in ${current.suburb}`}
-                  fill
                   sizes="(max-width: 1024px) 100vw, 928px"
                   className="object-cover"
                 />

@@ -1,10 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import type { ProductItem } from "@/server/services/catalog";
 import { ChevronDownIcon, SearchIcon } from "@/components/icons";
+import SafeImage from "@/components/SafeImage";
 
 const PER_PAGE = 9;
 
@@ -272,10 +272,9 @@ export default function ShopBrowser({ products }: { products: ProductItem[] }) {
             {pageItems.map((product) => (
               <div key={product.slug} className="group flex flex-col gap-2">
                 <div className="relative aspect-square w-full overflow-hidden rounded-lg bg-gray-100">
-                  <Image
+                  <SafeImage
                     src={product.image}
                     alt={product.title}
-                    fill
                     sizes="(max-width: 768px) 50vw, 33vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />

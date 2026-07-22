@@ -68,6 +68,8 @@ export const serviceSchema = z.object({
   projectCategory: z.string().trim().default(""),
   productCategory: z.string().trim().default(""),
   parentSlug: z.string().trim().toLowerCase().default(""),
+  rangeHeading: z.string().trim().default(""),
+  rangeIntro: z.string().trim().default(""),
   faqs: z
     .array(z.object({ question: z.string().default(""), answer: z.string().default("") }))
     .default([]),

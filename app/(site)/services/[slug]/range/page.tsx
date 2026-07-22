@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import PageHero from "@/app/_components/site/PageHero";
 import { Container } from "@/app/_components/site/ui";
 import { ArrowUpRightIcon } from "@/components/icons";
+import SafeImage from "@/components/SafeImage";
 import {
   getServiceCatalog,
   getServiceChildren,
-  getServiceBySlug,
+  getServiceDetail,
 } from "@/server/services/catalog";
 import { getSettings } from "@/server/services/content";
 
@@ -26,7 +26,7 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const service = await getServiceBySlug(slug);
+  const service = await getServiceDetail(slug);
   if (!service) return {};
   return {
     title: `${service.title} range`,
@@ -38,7 +38,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 export default async function ServiceRangePage({ params }: Params) {
   const { slug } = await params;
   const [service, children, settings] = await Promise.all([
-    getServiceBySlug(slug),
+    getServiceDetail(slug),
     getServiceChildren(slug),
     getSettings(),
   ]);
@@ -65,11 +65,11 @@ export default async function ServiceRangePage({ params }: Params) {
         <Container>
           <div className="mb-8 flex flex-col gap-2">
             <h2 className="text-2xl font-semibold text-black sm:text-3xl">
-              The {service.title.toLowerCase()} range
+              {service.rangeHeading || `The ${service.title.toLowerCase()} range`}
             </h2>
             <p className="max-w-2xl text-sm leading-relaxed text-black/60">
-              Pick the option that suits your block and budget — tap any to see
-              its full detail, colours and pricing.
+              {service.rangeIntro ||
+                "Pick the option that suits your block and budget — tap any to see its full detail, colours and pricing."}
             </p>
           </div>
 
@@ -81,10 +81,9 @@ export default async function ServiceRangePage({ params }: Params) {
                 className="group flex flex-col gap-2.5"
               >
                 <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg bg-gray-100">
-                  <Image
+                  <SafeImage
                     src={child.image}
                     alt={child.title}
-                    fill
                     sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                   />

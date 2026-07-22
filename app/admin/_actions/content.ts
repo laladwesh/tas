@@ -114,6 +114,8 @@ function serviceFields(fd: FormData) {
     faqs: rows(fd, "faqs", ["question", "answer"]),
     areas: lines(fd, "areas"),
     parentSlug: str(fd, "parentSlug"),
+    rangeHeading: str(fd, "rangeHeading"),
+    rangeIntro: str(fd, "rangeIntro"),
   };
 }
 

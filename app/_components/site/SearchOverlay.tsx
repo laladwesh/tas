@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { SearchIcon } from "@/components/icons";
+import SafeImage from "@/components/SafeImage";
 
 type ProductHit = {
   slug: string;
@@ -159,7 +159,7 @@ export default function SearchBox() {
                     className="flex w-full items-center gap-[12px] rounded-[8px] px-[8px] py-[8px] text-left transition-colors hover:bg-field"
                   >
                     <span className="relative size-[40px] shrink-0 overflow-hidden rounded-[6px] bg-field">
-                      <Image src={p.image} alt="" fill sizes="40px" className="object-cover" />
+                      <SafeImage src={p.image} alt="" sizes="40px" className="object-cover" />
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="line-clamp-1 text-sm text-black">{p.title}</span>
@@ -176,7 +176,7 @@ export default function SearchBox() {
                     className="flex w-full items-center gap-[12px] rounded-[8px] px-[8px] py-[8px] text-left transition-colors hover:bg-field"
                   >
                     <span className="relative size-[40px] shrink-0 overflow-hidden rounded-[6px] bg-field">
-                      <Image src={s.image} alt="" fill sizes="40px" className="object-cover" />
+                      <SafeImage src={s.image} alt="" sizes="40px" className="object-cover" />
                     </span>
                     <span className="min-w-0 flex-1">
                       <span className="line-clamp-1 text-sm text-black">{s.title}</span>

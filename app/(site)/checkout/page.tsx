@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import PageHero from "@/app/_components/site/PageHero";
 import { Container } from "@/app/_components/site/ui";
+import SafeImage from "@/components/SafeImage";
 import CheckoutForm from "./CheckoutForm";
 import { getCart } from "@/server/services/cart";
 import { getSettings } from "@/server/services/content";
@@ -62,10 +62,9 @@ export default async function CheckoutPage() {
                   {cart.items.map((line) => (
                     <li key={line.productSlug} className="flex items-center gap-3">
                       <span className="relative size-[48px] shrink-0 overflow-hidden rounded-[4px] bg-white">
-                        <Image
+                        <SafeImage
                           src={line.image}
                           alt=""
-                          fill
                           sizes="48px"
                           className="object-cover"
                         />

@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -7,6 +6,7 @@ import PageHero from "@/app/_components/site/PageHero";
 import FaqAccordion from "@/app/_components/site/FaqAccordion";
 import { ArrowPillLink, Container, Eyebrow } from "@/app/_components/site/ui";
 import JsonLd from "@/components/JsonLd";
+import SafeImage from "@/components/SafeImage";
 import {
   ArrowUpRightIcon,
   CheckIcon,
@@ -92,6 +92,51 @@ function TileBars({ visual }: { visual: string }) {
         {[23, 69, 115].map((x) => (
           <rect key={`s${x}`} x={x} y="43" width="4" height="5" rx="1" fill={TILE_FILL} fillOpacity="0.9" />
         ))}
+      </svg>
+    );
+  }
+
+  // Thin vertical slots (slotted perforated panel).
+  if (visual === "perf-slot") {
+    return (
+      <svg viewBox="0 0 138 48" preserveAspectRatio="none" className={cls}>
+        {Array.from({ length: 11 }).map((_, i) => (
+          <rect key={i} x={i * 12.5 + 3} y="0" width="4" height="48" rx="1.5" fill={TILE_FILL} fillOpacity="0.85" />
+        ))}
+      </svg>
+    );
+  }
+
+  // Two solid panels split by a contrasting centre divider (custom-pattern perf).
+  if (visual === "perf-custom") {
+    return (
+      <svg viewBox="0 0 138 48" preserveAspectRatio="none" className={cls}>
+        <rect x="0" y="0" width="65" height="48" rx="2" fill="#dbeafe" />
+        <rect x="73" y="0" width="65" height="48" rx="2" fill="#dbeafe" />
+        <rect x="65" y="0" width="8" height="48" fill={TILE_FILL} />
+      </svg>
+    );
+  }
+
+  // Two panels dotted with round perforations (round-hole perf).
+  if (visual === "perf-round") {
+    return (
+      <svg viewBox="0 0 138 48" preserveAspectRatio="none" className={cls}>
+        <rect x="0" y="0" width="65" height="48" rx="2" fill="#dbeafe" />
+        <rect x="73" y="0" width="65" height="48" rx="2" fill="#dbeafe" />
+        {[0, 73].map((panelX) =>
+          [12, 32, 52].flatMap((cx) =>
+            [12, 24, 36].map((cy) => (
+              <circle
+                key={`${panelX}-${cx}-${cy}`}
+                cx={panelX + cx}
+                cy={cy}
+                r="2.2"
+                fill="#93c5fd"
+              />
+            )),
+          ),
+        )}
       </svg>
     );
   }
@@ -378,10 +423,9 @@ export default async function ServiceDetailPage({ params }: Params) {
               {rangeProducts.map((product) => (
                 <div key={product.slug} className="group flex flex-col gap-[10px]">
                   <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[6px] bg-gray-100">
-                    <Image
+                    <SafeImage
                       src={product.image}
                       alt={product.title}
-                      fill
                       sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />
@@ -532,10 +576,9 @@ export default async function ServiceDetailPage({ params }: Params) {
                   key={`${project.title}-${i}`}
                   className="group relative aspect-[4/3] overflow-hidden rounded-[6px] bg-gray-100"
                 >
-                  <Image
+                  <SafeImage
                     src={project.image}
                     alt={project.title}
-                    fill
                     sizes="(max-width: 640px) 100vw, 33vw"
                     className="object-cover transition-transform duration-300 group-hover:scale-105"
                   />
@@ -575,10 +618,9 @@ export default async function ServiceDetailPage({ params }: Params) {
                   <div className="mt-auto flex items-center gap-[10px]">
                     {review.avatar && (
                       <span className="relative size-[32px] overflow-hidden rounded-full bg-gray-100">
-                        <Image
+                        <SafeImage
                           src={review.avatar}
                           alt={review.name}
-                          fill
                           sizes="32px"
                           className="object-cover"
                         />

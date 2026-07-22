@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 import PageHero from "@/app/_components/site/PageHero";
 import { Container } from "@/app/_components/site/ui";
+import SafeImage from "@/components/SafeImage";
 import { getProducts, getServiceCatalog } from "@/server/services/catalog";
 import { getSettings } from "@/server/services/content";
 
@@ -76,7 +76,7 @@ export default async function SearchPage({
                     {serviceHits.map((s) => (
                       <Link key={s.slug} href={`/services/${s.slug}`} className="group flex flex-col gap-[8px]">
                         <div className="relative aspect-[4/3] w-full overflow-hidden rounded-[6px] bg-gray-100">
-                          <Image src={s.image} alt={s.title} fill sizes="(max-width:768px) 50vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                          <SafeImage src={s.image} alt={s.title} sizes="(max-width:768px) 50vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                         </div>
                         <h3 className="text-base font-medium leading-[1.4] text-black">{s.title}</h3>
                         <p className="text-sm text-black/60">{s.priceFrom}</p>
@@ -93,7 +93,7 @@ export default async function SearchPage({
                     {productHits.map((p) => (
                       <Link key={p.slug} href={`/shop/${p.slug}`} className="group flex flex-col gap-[8px]">
                         <div className="relative aspect-square w-full overflow-hidden rounded-[6px] bg-field">
-                          <Image src={p.image} alt={p.title} fill sizes="(max-width:768px) 50vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
+                          <SafeImage src={p.image} alt={p.title} sizes="(max-width:768px) 50vw, 25vw" className="object-cover transition-transform duration-500 group-hover:scale-105" />
                         </div>
                         {p.category && <p className="text-xs text-black/50">{p.category}</p>}
                         <h3 className="line-clamp-2 text-base font-medium leading-[1.4] text-black">{p.title}</h3>

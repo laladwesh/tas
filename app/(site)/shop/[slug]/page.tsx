@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { Container } from "@/app/_components/site/ui";
 import JsonLd from "@/components/JsonLd";
 import { CheckIcon, StarIcon } from "@/components/icons";
+import SafeImage from "@/components/SafeImage";
 import ProductGallery from "./ProductGallery";
 import ProductPurchasePanel from "./ProductPurchasePanel";
 import ReviewForm from "./ReviewForm";
@@ -231,7 +231,7 @@ export default async function ProductPage({ params }: Params) {
                         key={`${src}-${i}`}
                         className="relative size-[92px] shrink-0 overflow-hidden rounded-[6px] bg-field"
                       >
-                        <Image src={src} alt="" fill sizes="92px" className="object-cover" />
+                        <SafeImage src={src} alt="" sizes="92px" className="object-cover" />
                         {isLast && more > 0 && (
                           <span className="absolute inset-0 flex items-center justify-center bg-black/55 text-sm font-semibold text-white">
                             +{more}
@@ -259,7 +259,7 @@ export default async function ProductPage({ params }: Params) {
                   <div className="mt-auto flex items-center gap-[10px]">
                     {review.avatar && (
                       <span className="relative size-[30px] overflow-hidden rounded-full bg-gray-100">
-                        <Image src={review.avatar} alt={review.name} fill sizes="30px" className="object-cover" />
+                        <SafeImage src={review.avatar} alt={review.name} sizes="30px" className="object-cover" />
                       </span>
                     )}
                     <div className="flex flex-col">
@@ -293,10 +293,9 @@ export default async function ProductPage({ params }: Params) {
                   className="group flex flex-col gap-[8px]"
                 >
                   <div className="relative aspect-square w-full overflow-hidden rounded-[8px] bg-field">
-                    <Image
+                    <SafeImage
                       src={item.image}
                       alt={item.title}
-                      fill
                       sizes="(max-width: 768px) 50vw, 33vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-105"
                     />

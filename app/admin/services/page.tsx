@@ -70,7 +70,7 @@ function RichServiceFields({ s = BLANK }: { s?: Partial<AdminService> }) {
           <input name="heightsTitle" defaultValue={s.heightsTitle} placeholder="Heights & pricing" className={inputClass} />
         </Field>
         <div className="sm:col-span-2">
-          <Field label="Sizes — one per line: label | price | popular? | visual   (visual = solid|gapped|glass|radiator|sleeper). e.g. 1800mm | from $104 / lm | yes | solid">
+          <Field label="Sizes — one per line: label | price | popular? | visual   (visual = solid|gapped|glass|radiator|sleeper|mesh|perf-slot|perf-custom|perf-round). e.g. 1800mm | from $104 / lm | yes | solid">
             <textarea name="heights" rows={4} defaultValue={s.heights} className={ta} />
           </Field>
         </div>
@@ -130,6 +130,12 @@ function RichServiceFields({ s = BLANK }: { s?: Partial<AdminService> }) {
             <input name="parentSlug" defaultValue={s.parentSlug} placeholder="pool-fencing" className={inputClass} />
           </Field>
         </div>
+        <Field label='Range page heading (only used if OTHER services set this as their parent). Default: "The {title} range"'>
+          <input name="rangeHeading" defaultValue={s.rangeHeading} placeholder="The pool fencing range" className={inputClass} />
+        </Field>
+        <Field label="Range page intro paragraph (shown under the heading on the range grid)">
+          <input name="rangeIntro" defaultValue={s.rangeIntro} className={inputClass} />
+        </Field>
       </div>
     </details>
   );
@@ -197,13 +203,25 @@ export default async function ServicesAdminPage({
                 <li key={service.id} className="rounded-sm border border-gray-200 p-4">
                   <div className="flex flex-col gap-4 sm:flex-row">
                     <div className="relative h-20 w-40 shrink-0 overflow-hidden rounded-sm bg-gray-100">
-                      {service.image.startsWith("/") || service.image.startsWith("http") ? (
+                      {service.image.startsWith("/") ? (
+                        // Local /public path — safe to optimise with next/image.
                         <Image
                           src={service.image}
                           alt={service.title}
                           fill
                           sizes="160px"
                           className="object-cover"
+                        />
+                      ) : service.image.startsWith("http") ? (
+                        // External URL from an unknown host: next/image would throw
+                        // at runtime unless the host is whitelisted in
+                        // next.config.js. Fall back to a plain <img> so one bad
+                        // pasted URL can't crash the whole admin page.
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={service.image}
+                          alt={service.title}
+                          className="h-full w-full object-cover"
                         />
                       ) : null}
                     </div>

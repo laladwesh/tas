@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 import PageHero from "@/app/_components/site/PageHero";
 import { Container } from "@/app/_components/site/ui";
+import SafeImage from "@/components/SafeImage";
 import { getCart } from "@/server/services/cart";
 import { getSettings } from "@/server/services/content";
 import { formatCents } from "@/lib/money";
@@ -54,10 +54,9 @@ export default async function CartPage() {
                       href={`/shop/${line.productSlug}`}
                       className="relative size-[88px] shrink-0 overflow-hidden rounded-[4px] bg-field"
                     >
-                      <Image
+                      <SafeImage
                         src={line.image}
                         alt={line.title}
-                        fill
                         sizes="88px"
                         className="object-cover"
                       />

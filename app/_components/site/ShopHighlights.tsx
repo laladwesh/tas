@@ -1,13 +1,13 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowPillLink,
   Container,
   Eyebrow,
 } from "@/app/_components/site/ui";
+import SafeImage from "@/components/SafeImage";
 import { ChevronLeft, ChevronRight } from "@/components/icons";
 import type { ProductItem } from "@/server/services/catalog";
 
@@ -100,10 +100,9 @@ function ProductRow({
             className="flex w-[217px] shrink-0 snap-start flex-col gap-[4px] rounded-[12px] pb-[12px] drop-shadow-[4px_4px_16px_rgba(0,0,0,0.1)]"
           >
             <div className="relative size-[217px] overflow-hidden rounded-[4px] bg-white">
-              <Image
+              <SafeImage
                 src={product.image}
                 alt={product.title}
-                fill
                 sizes="217px"
                 className="object-cover"
               />

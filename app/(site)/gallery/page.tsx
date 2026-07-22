@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 
 import PageHero from "@/app/_components/site/PageHero";
 import { Container } from "@/app/_components/site/ui";
+import SafeImage from "@/components/SafeImage";
 import { getProjects } from "@/server/services/catalog";
 import { getSettings } from "@/server/services/content";
 
@@ -93,7 +93,7 @@ export default async function GalleryPage({
                 className="group mb-4 break-inside-avoid overflow-hidden rounded-[8px]"
               >
                 <div className="relative w-full overflow-hidden bg-field">
-                  <Image
+                  <SafeImage
                     src={shot.image}
                     alt={`${shot.category} fencing in ${shot.suburb}`}
                     width={800}

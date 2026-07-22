@@ -1,9 +1,9 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import { Container, Eyebrow } from "@/app/_components/site/ui";
 import { GoogleG, StarIcon, ChevronLeft, ChevronRight } from "@/components/icons";
+import SafeImage from "@/components/SafeImage";
 import type { ReviewItem } from "@/server/services/catalog";
 
 
@@ -74,10 +74,9 @@ export default function Reviews({ reviews }: { reviews: ReviewItem[] }) {
                 >
                   {/* Photo + badges */}
                   <div className="relative h-[139px] w-full shrink-0 overflow-hidden rounded-[4px]">
-                    <Image
+                    <SafeImage
                       src={review.image}
                       alt=""
-                      fill
                       sizes="217px"
                       className="object-cover"
                     />
@@ -108,10 +107,9 @@ export default function Reviews({ reviews }: { reviews: ReviewItem[] }) {
                   {/* Author */}
                   <div className="flex items-center gap-[8px] px-[12px] pb-[16px]">
                     <span className="relative size-[32px] shrink-0 overflow-hidden rounded-full">
-                      <Image
+                      <SafeImage
                         src={review.avatar}
                         alt=""
-                        fill
                         sizes="32px"
                         className="object-cover"
                       />

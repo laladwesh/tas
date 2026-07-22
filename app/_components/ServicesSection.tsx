@@ -1,5 +1,5 @@
-import Image from "next/image";
 import type { ServiceDTO } from "@/server/services/content";
+import SafeImage from "@/components/SafeImage";
 
 export default function ServicesSection({ services }: { services: ServiceDTO[] }) {
   if (services.length === 0) return null;
@@ -15,10 +15,9 @@ export default function ServicesSection({ services }: { services: ServiceDTO[] }
           {services.map((service, i) => (
             <article key={service.title + i} className="group">
               <div className="relative aspect-[2/1] w-full overflow-hidden rounded-lg bg-gray-100">
-                <Image
+                <SafeImage
                   src={service.image}
                   alt={service.title}
-                  fill
                   sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
                   className="object-cover"
                 />

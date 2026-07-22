@@ -1,6 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRightIcon, PhoneCallIcon } from "@/components/icons";
+import SafeImage from "@/components/SafeImage";
 
 type Crumb = { label: string; href?: string };
 
@@ -28,14 +28,7 @@ export default function PageHero({
 }: Props) {
   return (
     <section className="relative w-full overflow-hidden bg-hero">
-      <Image
-        src={image}
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover"
-      />
+      <SafeImage src={image} alt="" priority sizes="100vw" className="object-cover" />
       <span aria-hidden className="absolute inset-0 bg-black/45" />
 
       <div className="relative mx-auto flex min-h-[340px] flex-col items-center justify-center gap-[16px] px-5 pb-[48px] pt-[170px] text-center sm:px-8 lg:px-12 xl:px-20">

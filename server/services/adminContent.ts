@@ -129,6 +129,8 @@ export type AdminService = {
   faqs: string;
   areas: string;
   parentSlug: string;
+  rangeHeading: string;
+  rangeIntro: string;
 };
 
 /** Serialise the stored arrays back into the "one item / pipe-separated" text
@@ -199,6 +201,8 @@ export async function listAllServices(): Promise<AdminService[]> {
     faqs: joinRows(d.faqs, ["question", "answer"]),
     areas: joinLines(d.areas),
     parentSlug: d.parentSlug ?? "",
+    rangeHeading: d.rangeHeading ?? "",
+    rangeIntro: d.rangeIntro ?? "",
   }));
 }
 

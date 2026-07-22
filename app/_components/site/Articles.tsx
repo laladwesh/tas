@@ -1,10 +1,10 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { ArrowPillLink, Container, Eyebrow } from "@/app/_components/site/ui";
 import { ChevronLeft, ChevronRight, ClockIcon } from "@/components/icons";
+import SafeImage from "@/components/SafeImage";
 import type { ArticleItem } from "@/server/services/catalog";
 
 
@@ -70,10 +70,9 @@ export default function Articles({ articles }: { articles: ArticleItem[] }) {
                   className="flex w-[296px] shrink-0 snap-start flex-col gap-[4px] rounded-[12px] pb-[12px] drop-shadow-[4px_4px_16px_rgba(0,0,0,0.1)]"
                 >
                   <div className="relative h-[166px] w-[296px] overflow-hidden rounded-[4px]">
-                    <Image
+                    <SafeImage
                       src={article.image}
                       alt=""
-                      fill
                       sizes="296px"
                       className="object-cover"
                     />

@@ -82,7 +82,10 @@ export type TileVisual =
   | "glass"
   | "radiator"
   | "sleeper"
-  | "mesh";
+  | "mesh"
+  | "perf-slot"
+  | "perf-custom"
+  | "perf-round";
 export type ServiceHeight = {
   label: string;
   priceLabel: string;
@@ -117,6 +120,9 @@ export type ServiceDetail = ServiceItem & {
   productCategory: string;
   faqs: ServiceFaq[];
   areas: string[];
+  /** Only meaningful when this service has children (a range parent). */
+  rangeHeading: string;
+  rangeIntro: string;
 };
 
 export async function getServiceDetail(slug: string): Promise<ServiceDetail | null> {
@@ -161,6 +167,8 @@ export async function getServiceDetail(slug: string): Promise<ServiceDetail | nu
       productCategory: d.productCategory ?? "",
       faqs: (d.faqs ?? []).map((f) => ({ question: f.question ?? "", answer: f.answer ?? "" })),
       areas: d.areas ?? [],
+      rangeHeading: d.rangeHeading ?? "",
+      rangeIntro: d.rangeIntro ?? "",
     };
   } catch (error) {
     console.error("[catalog] getServiceDetail failed:", error);
