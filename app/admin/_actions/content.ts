@@ -94,11 +94,12 @@ function serviceFields(fd: FormData) {
       hex: c.hex || "#cccccc",
     })),
     heightsTitle: str(fd, "heightsTitle"),
-    heights: rows(fd, "heights", ["label", "priceLabel", "popular", "visual"]).map((h) => ({
+    heights: rows(fd, "heights", ["label", "priceLabel", "popular", "visual", "customSvg"]).map((h) => ({
       label: h.label,
       priceLabel: h.priceLabel,
       popular: /^(y|yes|true|1|popular)$/i.test(h.popular),
       visual: h.visual || "solid",
+      customSvg: h.customSvg || "",
     })),
     includesTitle: str(fd, "includesTitle"),
     includes: lines(fd, "includes"),

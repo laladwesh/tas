@@ -393,7 +393,18 @@ export default async function ServiceDetailPage({ params }: Params) {
                         Most popular
                       </span>
                     )}
-                    <TileBars visual={height.visual} />
+                    {height.customSvg ? (
+                      // Staff-pasted SVG (requireStaff()-gated write path) overrides
+                      // the built-in visual. Scaled to fill the tile via CSS so it
+                      // matches the built-in illustrations regardless of the
+                      // pasted markup's own width/height attributes.
+                      <div
+                        className="h-[44px] w-full [&>svg]:h-full [&>svg]:w-full"
+                        dangerouslySetInnerHTML={{ __html: height.customSvg }}
+                      />
+                    ) : (
+                      <TileBars visual={height.visual} />
+                    )}
                     <span className="text-lg font-semibold">{height.label}</span>
                     <span className="text-sm text-black/60">{height.priceLabel}</span>
                   </div>

@@ -91,6 +91,8 @@ export type ServiceHeight = {
   priceLabel: string;
   popular: boolean;
   visual: TileVisual;
+  /** Raw <svg>...</svg> markup — overrides `visual` when non-empty. */
+  customSvg: string;
 };
 export type ServiceStep = { title: string; body: string };
 export type ServiceFaq = { question: string; answer: string };
@@ -153,6 +155,7 @@ export async function getServiceDetail(slug: string): Promise<ServiceDetail | nu
         priceLabel: h.priceLabel ?? "",
         popular: Boolean(h.popular),
         visual: (h.visual as TileVisual) || "solid",
+        customSvg: h.customSvg ?? "",
       })),
       includesTitle: d.includesTitle ?? "",
       includes: d.includes ?? [],

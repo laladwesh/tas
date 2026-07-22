@@ -77,8 +77,13 @@ const svcHeightSchema = new Schema(
     priceLabel: { type: String, default: "" }, // e.g. "from $104 / lm"
     popular: { type: Boolean, default: false }, // shows the "Most popular" tag
     /** Which illustration to draw in the tile (TileVisual):
-     *  solid | gapped | glass | radiator | sleeper. Defaults to solid. */
+     *  solid | gapped | glass | radiator | sleeper. Defaults to solid.
+     *  Ignored when customSvg is set. */
     visual: { type: String, default: "solid" },
+    /** Raw <svg>...</svg> markup pasted by staff — overrides `visual` when
+     *  non-empty. Staff-only (requireStaff() gates the write action), same
+     *  trust boundary as any other admin-entered content/URL. */
+    customSvg: { type: String, default: "" },
   },
   { _id: false },
 );

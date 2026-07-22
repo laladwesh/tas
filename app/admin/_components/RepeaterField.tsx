@@ -30,7 +30,11 @@ const CELL_INPUT =
 /** "a | b" -> ["a","b"]. A literal "|" inside a value would break the format,
  *  same limitation the old raw-textarea version had — swap it for a similar
  *  character rather than let it silently corrupt the next column. */
-const clean = (v: string) => v.replace(/\|/g, "/");
+/** Rows are newline-separated and columns are "|"-separated, so a cell value
+ *  can't contain either — collapse internal newlines to spaces (harmless for
+ *  prose and for SVG markup, which ignores whitespace between tags) so a
+ *  multi-line paste (e.g. pretty-printed SVG) can't split into bogus rows. */
+const clean = (v: string) => v.replace(/\|/g, "/").replace(/\r?\n/g, " ");
 
 function parseRows(raw: string, columns: Column[]): Row[] {
   if (!raw.trim()) return [];

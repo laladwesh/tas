@@ -133,12 +133,18 @@ function RichServiceFields({ s = BLANK }: { s?: Partial<AdminService> }) {
               label="Tiles"
               addLabel="Add tile"
               defaultValue={s.heights}
-              hint="Visual = the little illustration on the tile"
+              hint="Custom SVG (if filled in) overrides Visual"
               columns={[
                 { key: "label", label: "Label", type: "text", placeholder: "1800mm" },
                 { key: "priceLabel", label: "Price", type: "text", placeholder: "from $104 / lm" },
                 { key: "popular", label: "Most popular", type: "checkbox" },
                 { key: "visual", label: "Visual", type: "select", options: VISUALS },
+                {
+                  key: "customSvg",
+                  label: "Custom SVG (optional — paste <svg>…</svg> markup)",
+                  type: "textarea",
+                  placeholder: "<svg viewBox=\"0 0 138 48\">…</svg>",
+                },
               ]}
             />
           </div>
