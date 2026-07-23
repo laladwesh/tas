@@ -4,10 +4,10 @@ import { ArrowUpRightIcon } from "@/components/icons";
 /**
  * Site content column — the shared width THEME for every page.
  *
- * Centred and capped so content doesn't stretch edge-to-edge on wide screens,
- * growing with the viewport at the larger breakpoints. Full-bleed backgrounds
- * still work: put the colour on the parent <section className="w-full …"> and
- * the Container inside it. Pass `className` only to tweak, not to re-cap width.
+ * Centred and capped at 1024px so content doesn't stretch edge-to-edge on
+ * wide screens. Full-bleed backgrounds still work: put the colour on the
+ * parent <section className="w-full …"> and the Container inside it. Pass
+ * `className` only to tweak, not to re-cap width.
  */
 export function Container({
   children,
@@ -18,7 +18,7 @@ export function Container({
 }) {
   return (
     <div
-      className={`mx-auto w-full max-w-[1200px] px-5 sm:px-8 lg:px-12 xl:max-w-[1360px] xl:px-20 2xl:max-w-[1480px] ${className}`}
+      className={`mx-auto w-full max-w-5xl px-5 sm:px-8 lg:px-10 ${className}`}
     >
       {children}
     </div>

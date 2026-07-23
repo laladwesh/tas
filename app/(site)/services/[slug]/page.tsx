@@ -204,6 +204,7 @@ export default async function ServiceDetailPage({ params }: Params) {
   if (!service) notFound();
 
   const related = all.filter((s) => s.slug !== service.slug).slice(0, 5);
+  const reviewsBadge = service.badges.find((b) => /review/i.test(b));
 
   // Product-range grid ("Service Page" in Figma): products in this service's
   // Shop category. Empty category or no matches → the section hides itself.
@@ -267,16 +268,23 @@ export default async function ServiceDetailPage({ params }: Params) {
               </p>
 
               {service.badges.length > 0 && (
-                <div className="mt-1 flex flex-wrap items-center gap-x-[20px] gap-y-[8px]">
-                  {service.badges.map((badge) => (
-                    <span
-                      key={badge}
-                      className="inline-flex items-center gap-[6px] text-sm font-medium text-black/70"
-                    >
-                      <ShieldCheckIcon className="size-[14px] text-brand" />
-                      {badge}
-                    </span>
-                  ))}
+                <div className="mt-1 flex flex-wrap items-center gap-[10px]">
+                  {service.badges.map((badge) => {
+                    const isRating = /review/i.test(badge);
+                    return (
+                      <span
+                        key={badge}
+                        className="inline-flex items-center gap-[6px] rounded-full border border-black/15 px-[14px] py-[6px] text-sm font-medium text-black/70"
+                      >
+                        {isRating ? (
+                          <StarIcon className="size-[14px] text-brand" />
+                        ) : (
+                          <ShieldCheckIcon className="size-[14px] text-brand" />
+                        )}
+                        {badge}
+                      </span>
+                    );
+                  })}
                 </div>
               )}
             </div>
@@ -349,14 +357,14 @@ export default async function ServiceDetailPage({ params }: Params) {
                 <p className="text-xs text-black/50">{service.coloursNote}</p>
               )}
             </div>
-            <div className="flex flex-wrap gap-[16px]">
+            <div className="flex flex-wrap gap-[14px]">
               {service.colours.map((colour) => (
                 <div
                   key={colour.name}
-                  className="flex w-[84px] flex-col items-center gap-[6px]"
+                  className="flex w-[72px] flex-col items-center gap-[8px]"
                 >
                   <span
-                    className="h-[56px] w-full rounded-[4px] shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]"
+                    className="aspect-square w-full rounded-[6px] shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]"
                     style={{ backgroundColor: colour.hex }}
                   />
                   <span className="text-center text-xs text-black/70">
@@ -529,8 +537,9 @@ export default async function ServiceDetailPage({ params }: Params) {
                 {service.compliance.map((item) => (
                   <li
                     key={item}
-                    className="text-sm leading-[1.6] text-black/75"
+                    className="flex items-start gap-[8px] text-sm leading-[1.6] text-black/75"
                   >
+                    <span aria-hidden className="mt-[7px] size-[4px] shrink-0 rounded-full bg-brand" />
                     {item}
                   </li>
                 ))}
@@ -550,7 +559,7 @@ export default async function ServiceDetailPage({ params }: Params) {
             <div className="grid gap-[24px] sm:grid-cols-2 lg:grid-cols-4">
               {service.process.map((step, i) => (
                 <div key={step.title} className="flex flex-col gap-[8px]">
-                  <span className="flex size-[32px] items-center justify-center rounded-full border border-ink text-sm font-medium text-ink">
+                  <span className="flex size-[32px] items-center justify-center rounded-full bg-ink text-sm font-medium text-white">
                     {String(i + 1).padStart(2, "0")}
                   </span>
                   <h3 className="mt-[4px] text-base font-medium text-black">
@@ -609,40 +618,54 @@ export default async function ServiceDetailPage({ params }: Params) {
       {reviews.length > 0 && (
         <section className="w-full bg-white pt-[48px]">
           <Container>
-            <h2 className="mb-[16px] text-xl font-medium text-black sm:text-2xl">
-              {service.reviewsTitle || "What Perth homeowners say"}
-            </h2>
+            <div className="mb-[16px] flex flex-wrap items-center justify-between gap-[12px]">
+              <h2 className="text-xl font-medium text-black sm:text-2xl">
+                {service.reviewsTitle || "What Perth homeowners say"}
+              </h2>
+              {reviewsBadge && (
+                <span className="inline-flex items-center gap-[6px] rounded-full border border-black/15 px-[14px] py-[6px] text-sm font-medium text-black/70">
+                  <StarIcon className="size-[14px] text-brand" />
+                  {reviewsBadge}
+                </span>
+              )}
+            </div>
             <div className="grid gap-[16px] sm:grid-cols-3">
-              {reviews.slice(0, 3).map((review) => (
-                <div
-                  key={review.name}
-                  className="flex flex-col gap-[12px] rounded-[8px] border border-cool-20 p-[20px]"
-                >
-                  <div className="flex items-center gap-[2px] text-brand">
-                    {Array.from({ length: 5 }).map((_, i) => (
-                      <StarIcon key={i} className="size-[14px]" />
-                    ))}
-                  </div>
-                  <p className="text-sm leading-[1.6] text-black/75">
-                    “{review.quote}”
-                  </p>
-                  <div className="mt-auto flex items-center gap-[10px]">
-                    {review.avatar && (
-                      <span className="relative size-[32px] overflow-hidden rounded-full bg-gray-100">
-                        <SafeImage
-                          src={review.avatar}
-                          alt={review.name}
-                          sizes="32px"
-                          className="object-cover"
+              {reviews.slice(0, 3).map((review) => {
+                const filled = Math.round(parseFloat(review.rating) || 5);
+                return (
+                  <div
+                    key={review.name}
+                    className="flex flex-col gap-[12px] rounded-[8px] border border-cool-20 p-[20px]"
+                  >
+                    <div className="flex items-center gap-[2px]">
+                      {Array.from({ length: 5 }).map((_, i) => (
+                        <StarIcon
+                          key={i}
+                          className={`size-[14px] ${i < filled ? "text-brand" : "text-black/15"}`}
                         />
+                      ))}
+                    </div>
+                    <p className="text-sm leading-[1.6] text-black/75">
+                      “{review.quote}”
+                    </p>
+                    <div className="mt-auto flex items-center gap-[10px]">
+                      {review.avatar && (
+                        <span className="relative size-[32px] overflow-hidden rounded-full bg-gray-100">
+                          <SafeImage
+                            src={review.avatar}
+                            alt={review.name}
+                            sizes="32px"
+                            className="object-cover"
+                          />
+                        </span>
+                      )}
+                      <span className="text-sm font-medium text-black">
+                        {review.name}
                       </span>
-                    )}
-                    <span className="text-sm font-medium text-black">
-                      {review.name}
-                    </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </Container>
         </section>
